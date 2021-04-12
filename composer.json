@@ -1,0 +1,17 @@
+{
+	"name": "juniwalk/whmcs",
+	"license": "MIT",
+
+	"authors": [{
+		"name": "Martin Procházka",
+		"email": "juniwalk@outlook.cz"
+	}],
+
+	"autoload": {
+		"psr-4": {"JuniWalk\\WHMCS\\": "src/"}
+	},
+
+	"require": {
+		"php": ">=7.4"
+	}
+}
