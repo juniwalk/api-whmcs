@@ -7,7 +7,24 @@
 
 namespace JuniWalk\WHMCS;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
+
 class Connector
 {
 	use Subsystems\Client;
+
+	/** @var Connection */
+	private $db;
+
+
+	/**
+	 * @param  string  $connectionUrl
+	 */
+	public function __construct(string $connectionUrl)
+	{
+		$this->db = DriverManager::getConnection([
+			'url' => $connectionUrl,
+		]);
+	}
 }
