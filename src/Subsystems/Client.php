@@ -9,8 +9,11 @@ namespace JuniWalk\WHMCS\Subsystems;
 
 trait Client
 {
-	public function getClient()
+	/**
+	 * @param  int  $clientId
+	 */
+	public function getClient(int $clientId)
 	{
-		return 'client';
+		return 'client-'.$clientId;
 	}
 }
