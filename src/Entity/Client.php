@@ -13,23 +13,23 @@ class Client extends AbstractEntity
 	const TABLE_NAME = 'tblclients';
 
 	/** @var int */
-	private $id;
+	protected $id;
 
 	/** @var string */
-	private $uuid;
+	protected $uuid;
 
 	/** @var string */
-	private $firstname;
+	protected $firstname;
 
 	/** @var string */
-	private $lastname;
+	protected $lastname;
 
 	/** @var string */
-	private $companyname;
+	protected $companyname;
 
 	/** @var string */
-	private $email;
+	protected $email;
 
 	/** @var string */
-	private $phonenumber;
+	protected $phonenumber;
 }

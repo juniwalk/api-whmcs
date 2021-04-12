@@ -10,6 +10,7 @@ namespace JuniWalk\WHMCS;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Query\QueryBuilder;
+use JuniWalk\WHMCS\Entity\AbstractEntity;
 use Nette\Utils\Strings;
 
 class Connector
@@ -35,9 +36,14 @@ class Connector
 	 * @param  string  $tableName
 	 * @param  string  $alias
 	 * @return QueryBuilder
+	 * @throws Exception
 	 */
 	protected function createQueryBuilder(string $className, string $alias): QueryBuilder
 	{
+		if (!is_subclass_of($className, AbstractEntity::class)) {
+			throw new \Exception;
+		}
+
 		$query = $this->db->createQueryBuilder()->from($className::TABLE_NAME, $alias);
 
 		foreach ($className::listColumns() as $column => $value) {

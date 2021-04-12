@@ -17,7 +17,7 @@ abstract class AbstractEntity
 	 */
 	public static function listColumns(self $self = null): iterable
 	{
-		return get_object_vars($self ?: new self);
+		return get_object_vars($self ?: new static);
 	}
 
 
