@@ -14,10 +14,7 @@ use Nette\Utils\Strings;
 
 class Connector
 {
-	use Subsystems\Client;
-
-	/** @var string */
-	const TABLE_PREFIX = 'tbl';
+	use Subsystems\ClientSubsystem;
 
 	/** @var Connection */
 	private $db;
@@ -37,17 +34,16 @@ class Connector
 	/**
 	 * @param  string  $tableName
 	 * @param  string  $alias
-	 * @param  bool  $autoPrefix
 	 * @return QueryBuilder
 	 */
-	protected function createQueryBuilder(string $tableName, string $alias, bool $autoPrefix = true): QueryBuilder
+	protected function createQueryBuilder(string $className, string $alias): QueryBuilder
 	{
-		if ($autoPrefix && !Strings::startsWith($tableName, $this::TABLE_PREFIX)) {
-			$tableName = $this::TABLE_PREFIX.$tableName;
+		$query = $this->db->createQueryBuilder()->from($className::TABLE_NAME, $alias);
+
+		foreach ($className::listColumns() as $column => $value) {
+			$query->addSelect($alias.'.'.$column);
 		}
 
-		return $this->db->createQueryBuilder()
-			->select($alias.'.*')
-			->from($tableName, $alias);
+		return $query;
 	}
 }
