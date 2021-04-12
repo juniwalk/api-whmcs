@@ -13,6 +13,7 @@
 
 	"require": {
 		"php": ">=7.4",
-		"doctrine/dbal": "^2.0"
+		"doctrine/dbal": "^2.0",
+		"nette/utils": "^3.0"
 	}
 }

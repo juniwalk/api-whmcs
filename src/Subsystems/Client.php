@@ -14,6 +14,11 @@ trait Client
 	 */
 	public function getClient(int $clientId)
 	{
-		return 'client-'.$clientId;
+		$result = $this->createQueryBuilder('clients', 'c')
+			->where('c.id = :clientId')
+			->setParameter('clientId', $clientId)
+			->execute();
+
+		return $result->fetchAllAssociative()[0];
 	}
 }
