@@ -19,4 +19,14 @@ trait ProductSubsystem
 	{
 		return $this->getOneById($productId, Product::class);
 	}
+
+
+	/**
+	 * @param  int  $productId
+	 * @return Product|null
+	 */
+	public function findProduct(int $productId): ?Product
+	{
+		return $this->findOneById($productId, Product::class);
+	}
 }

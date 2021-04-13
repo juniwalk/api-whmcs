@@ -19,4 +19,14 @@ trait ClientSubsystem
 	{
 		return $this->getOneById($clientId, Client::class);
 	}
+
+
+	/**
+	 * @param  int  $clientId
+	 * @return Client|null
+	 */
+	public function findClient(int $clientId): ?Client
+	{
+		return $this->findOneById($clientId, Client::class);
+	}
 }
