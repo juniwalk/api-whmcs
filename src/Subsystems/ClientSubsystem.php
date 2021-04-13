@@ -17,12 +17,6 @@ trait ClientSubsystem
 	 */
 	public function getClient(int $clientId): Client
 	{
-		$query = $this->createQueryBuilder(Client::class, 'c')
-			->where('c.id = :clientId')
-			->setParameter('clientId', $clientId);
-
-		$result = $query->execute();
-
-		return Client::fromResult($result);
+		return $this->getOneById($clientId, Client::class);
 	}
 }

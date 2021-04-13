@@ -17,12 +17,6 @@ trait ProductSubsystem
 	 */
 	public function getProduct(int $productId): Product
 	{
-		$query = $this->createQueryBuilder(Product::class, 'p')
-			->where('p.id = :productId')
-			->setParameter('productId', $productId);
-
-		$result = $query->execute();
-
-		return Product::fromResult($result);
+		return $this->getOneById($productId, Product::class);
 	}
 }

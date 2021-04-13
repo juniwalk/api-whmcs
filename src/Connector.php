@@ -34,6 +34,36 @@ class Connector
 
 
 	/**
+	 * @param  int  $id
+	 * @param  string  $className
+	 * @return AbstractEntity
+	 * @throws Exception
+	 */
+	public function getOneById(int $id, string $className): AbstractEntity
+	{
+		$query = $this->createQueryBuilder($className, 'e')
+			->where('e.id = :id')
+			->setParameter('id', $id);
+
+		$result = $query->execute();
+
+		return $className::fromResult($result);
+	}
+
+
+	/**
+	 * @param  int  $id
+	 * @param  string  $className
+	 * @return AbstractEntity|null
+	 */
+	public function findOneById(int $id, string $className): ?AbstractEntity
+	{
+		return null;
+		// return $this->getOneById($id, $className) ?: null;
+	}
+
+
+	/**
 	 * @param  string  $tableName
 	 * @param  string  $alias
 	 * @return QueryBuilder

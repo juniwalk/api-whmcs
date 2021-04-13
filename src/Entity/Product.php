@@ -27,6 +27,6 @@ class Product extends AbstractEntity
 	/** @var int */
 	protected $overagesdisklimit;
 
-	/** @var int */
+	/** @var float */
 	protected $overagesdiskprice;
 }
