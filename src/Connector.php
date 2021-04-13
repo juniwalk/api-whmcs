@@ -16,6 +16,7 @@ use Nette\Utils\Strings;
 class Connector
 {
 	use Subsystems\ClientSubsystem;
+	use Subsystems\ProductSubsystem;
 
 	/** @var Connection */
 	private $db;
