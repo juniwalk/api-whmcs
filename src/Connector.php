@@ -11,6 +11,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Query\QueryBuilder;
 use JuniWalk\WHMCS\Entity\AbstractEntity;
+use JuniWalk\WHMCS\Exceptions\NoResultException;
 use Nette\Utils\Strings;
 
 class Connector
@@ -37,7 +38,7 @@ class Connector
 	 * @param  int  $id
 	 * @param  string  $className
 	 * @return AbstractEntity
-	 * @throws Exception
+	 * @throws NoResultException
 	 */
 	public function getOneById(int $id, string $className): AbstractEntity
 	{
@@ -48,7 +49,7 @@ class Connector
 		$result = $query->execute();
 
 		if (!$result->rowCount()) {
-			throw new \Exception;
+			throw NoResultException::fromClass($className, $id);
 		}
 
 		return $className::fromResult($result);
@@ -65,7 +66,7 @@ class Connector
 		try {
 			return $this->getOneById($id, $className);
 
-		} catch (\Exception $e) {
+		} catch (NoResultException $e) {
 		}
 
 		return null;
