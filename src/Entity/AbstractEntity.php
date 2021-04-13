@@ -8,6 +8,8 @@
 namespace JuniWalk\WHMCS\Entity;
 
 use Doctrine\DBAL\Driver\ResultStatement;
+use Nette\Utils\Strings;
+use ReflectionProperty;
 
 abstract class AbstractEntity
 {
@@ -36,9 +38,35 @@ abstract class AbstractEntity
 				continue;
 			}
 
-			$self->$key = $value;
+			$self->$key = static::assignUsingType($key, $value);
 		}
 
 		return $self;
+	}
+
+
+	/**
+	 * @param  string  $key
+	 * @param  string  $value
+	 * @return mixed
+	 */
+	private static function assignUsingType(string $key, string $value)
+	{
+		$rp = new ReflectionProperty(static::class, $key);
+		$matches = Strings::match($rp->getDocComment(), '/@var\s+([^\s]+)/i');
+
+		switch (Strings::lower($matches[1])) {
+			case 'int':
+				return (int) $value;
+				break;
+
+			case 'float':
+				return (float) $value;
+				break;
+
+			default: break;
+		}
+
+		return $value;
 	}
 }
