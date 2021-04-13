@@ -47,6 +47,10 @@ class Connector
 
 		$result = $query->execute();
 
+		if (!$result->rowCount()) {
+			throw new \Exception;
+		}
+
 		return $className::fromResult($result);
 	}
 
@@ -58,8 +62,13 @@ class Connector
 	 */
 	public function findOneById(int $id, string $className): ?AbstractEntity
 	{
+		try {
+			return $this->getOneById($id, $className);
+
+		} catch (\Exception $e) {
+		}
+
 		return null;
-		// return $this->getOneById($id, $className) ?: null;
 	}
 
 
