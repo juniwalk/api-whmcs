@@ -38,7 +38,7 @@ abstract class AbstractEntity
 				continue;
 			}
 
-			$self->$key = static::assignUsingType($key, $value);
+			$self->$key = static::castToType($key, $value);
 		}
 
 		return $self;
@@ -50,7 +50,7 @@ abstract class AbstractEntity
 	 * @param  string  $value
 	 * @return mixed
 	 */
-	private static function assignUsingType(string $key, string $value)
+	private static function castToType(string $key, string $value)
 	{
 		$rp = new ReflectionProperty(static::class, $key);
 		$matches = Strings::match($rp->getDocComment(), '/@var\s+([^\s]+)/i');
