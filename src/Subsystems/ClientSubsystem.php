@@ -29,4 +29,33 @@ trait ClientSubsystem
 	{
 		return $this->findOneById($clientId, Client::class);
 	}
+
+
+	/**
+	 * @param  string  $query
+	 * @param  callable|null  $where
+	 * @return Client[]
+	 */
+	public function findCliendByName(string $query, callable $where = null): iterable
+	{
+		$items = [];
+		$builder = $this->createQueryBuilder(Client::class, 'e')
+			->where('e.firstname LIKE :query OR e.lastname LIKE :query OR e.companyname LIKE :query')
+			->setParameter('query', "%{$query}%");
+
+		if (is_callable($where)) {
+			$builder = $where($builder) ?: $builder;
+		}
+
+		if (!$result = $builder->execute()) {
+			return $items;
+		}
+
+		foreach ($result->fetchAllAssociative() as $item) {
+			$item = Client::fromResult($item);
+			$items[$item->getId()] = $item;
+		}
+
+		return $items;
+	}
 }

@@ -93,6 +93,15 @@ class Client extends AbstractEntity
 	/**
 	 * @return string
 	 */
+	public function getFullName(): string
+	{
+		return "{$this->firstname} {$this->lastname}";
+	}
+
+
+	/**
+	 * @return string
+	 */
 	public function getCompanyName(): string
 	{
 		return $this->companyname;

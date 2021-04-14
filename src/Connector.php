@@ -65,7 +65,8 @@ class Connector
 	{
 		$query = $this->createQueryBuilder($className, 'e')
 			->where('e.id = :id')
-			->setParameter('id', $id);
+			->setParameter('id', $id)
+			->setMaxResults(1);
 
 		$result = $query->execute();
 
@@ -73,7 +74,7 @@ class Connector
 			throw NoResultException::fromClass($className, $id);
 		}
 
-		return $className::fromResult($result);
+		return $className::fromResult($result->fetchAssociative());
 	}
 
 

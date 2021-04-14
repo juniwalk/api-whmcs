@@ -7,7 +7,6 @@
 
 namespace JuniWalk\WHMCS\Entity;
 
-use Doctrine\DBAL\Driver\ResultStatement;
 use Nette\Utils\Strings;
 use ReflectionProperty;
 
@@ -45,16 +44,15 @@ abstract class AbstractEntity
 
 
 	/**
-	 * @param  ResultStatement  $result
+	 * @param  string[]  $result
 	 * @return static
 	 * @internal
 	 */
-	public static function fromResult(ResultStatement $result): self
+	public static function fromResult(iterable $result): self
 	{
-		$items = $result->fetchAssociative();
 		$self = new static;
 
-		foreach ($items as $key => $value) {
+		foreach ($result as $key => $value) {
 			if (!property_exists($self, $key)) {
 				continue;
 			}
