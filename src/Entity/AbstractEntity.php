@@ -14,6 +14,7 @@ use ReflectionProperty;
 abstract class AbstractEntity
 {
 	/**
+	 * @param  static|null  $self
 	 * @return string[]
 	 * @internal
 	 */
@@ -53,7 +54,10 @@ abstract class AbstractEntity
 	private static function castToType(string $key, string $value)
 	{
 		$rp = new ReflectionProperty(static::class, $key);
-		$matches = Strings::match($rp->getDocComment(), '/@var\s+([^\s]+)/i');
+		$matches = Strings::match(
+			$rp->getDocComment(),
+			'/@var\s+([^\s]+)/i'
+		);
 
 		switch (Strings::lower($matches[1])) {
 			case 'int':
