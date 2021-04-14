@@ -35,6 +35,29 @@ class Connector
 
 
 	/**
+	 * @param  AbstractEntity  $entity
+	 * @return void
+	 */
+	public function persist(AbstractEntity $entity): void
+	{
+		if (!$changes = $entity::listChanges($entity)) {
+			return;
+		}
+
+		$query = $this->db->createQueryBuilder()
+			->update($entity::TABLE_NAME, 'e');
+
+		foreach ($changes as $key => $value) {
+			$query->set('e.'.$key, ':'.$key);
+			$query->setParameter($key, $value);
+		}
+
+		$query->where('e.id = :id')->setParameter('id', $entity->getId());
+		$query->execute();
+	}
+
+
+	/**
 	 * @param  int  $id
 	 * @param  string  $className
 	 * @return AbstractEntity
@@ -85,7 +108,8 @@ class Connector
 			throw new \Exception;
 		}
 
-		$query = $this->db->createQueryBuilder()->from($className::TABLE_NAME, $alias);
+		$query = $this->db->createQueryBuilder()
+			->from($className::TABLE_NAME, $alias);
 
 		foreach ($className::listColumns() as $column => $value) {
 			$query->addSelect($alias.'.'.$column);

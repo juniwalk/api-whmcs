@@ -13,6 +13,10 @@ use ReflectionProperty;
 
 abstract class AbstractEntity
 {
+	/** @var string[] */
+	private $changeSet;
+
+
 	/**
 	 * @param  static|null  $self
 	 * @return string[]
@@ -20,7 +24,24 @@ abstract class AbstractEntity
 	 */
 	public static function listColumns(self $self = null): iterable
 	{
-		return get_object_vars($self ?: new static);
+		$columns = get_object_vars($self ?: new static);
+		unset($columns['changeSet']);
+
+		return $columns;
+	}
+
+
+	/**
+	 * @param  static|null  $self
+	 * @return string[]
+	 * @internal
+	 */
+	public static function listChanges(self $self): iterable
+	{
+		$old = $self->changeSet;
+		$new = static::listColumns($self);
+
+		return array_diff_assoc($new, $old);
 	}
 
 
@@ -41,6 +62,8 @@ abstract class AbstractEntity
 
 			$self->$key = static::castToType($key, $value);
 		}
+
+		$self->changeSet = static::listColumns($self);
 
 		return $self;
 	}
