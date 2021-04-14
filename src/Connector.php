@@ -8,7 +8,6 @@
 namespace JuniWalk\WHMCS;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Query\QueryBuilder;
 use JuniWalk\WHMCS\Entity\AbstractEntity;
 use JuniWalk\WHMCS\Exceptions\NoResultException;
@@ -20,17 +19,15 @@ class Connector
 	use Subsystems\ProductSubsystem;
 
 	/** @var Connection */
-	private $db;
+	private $database;
 
 
 	/**
-	 * @param  string  $connectionUrl
+	 * @param  Connection  $database
 	 */
-	public function __construct(string $connectionUrl)
+	public function __construct(Connection $database)
 	{
-		$this->db = DriverManager::getConnection([
-			'url' => $connectionUrl,
-		]);
+		$this->database = $database;
 	}
 
 
@@ -44,7 +41,7 @@ class Connector
 			return;
 		}
 
-		$query = $this->db->createQueryBuilder()
+		$query = $this->database->createQueryBuilder()
 			->update($entity::TABLE_NAME, 'e');
 
 		foreach ($changes as $key => $value) {
@@ -108,7 +105,7 @@ class Connector
 			throw new \Exception;
 		}
 
-		$query = $this->db->createQueryBuilder()
+		$query = $this->database->createQueryBuilder()
 			->from($className::TABLE_NAME, $alias);
 
 		foreach ($className::listColumns() as $column => $value) {
