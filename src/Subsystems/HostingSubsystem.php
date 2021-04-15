@@ -8,6 +8,7 @@
 namespace JuniWalk\WHMCS\Subsystems;
 
 use JuniWalk\WHMCS\Entity\Hosting;
+use JuniWalk\WHMCS\Entity\Product;
 
 trait HostingSubsystem
 {
@@ -34,14 +35,16 @@ trait HostingSubsystem
 	/**
 	 * @param  string  $query
 	 * @param  callable|null  $where
-	 * @return Client[]
+	 * @return Hosting[]
 	 */
 	public function findActiveHostings(): iterable
 	{
 		$items = [];
 		$builder = $this->createQueryBuilder(Hosting::class, 'e')
-			->where('e.domainstatus = :status')
-			->setParameter('status', 'Active');
+			->innerJoin('e', Product::TABLE_NAME, 'p', 'e.packageid = p.id')
+			->where('e.domainstatus = :status AND p.type = :type')
+			->setParameter('status', 'Active')
+			->setParameter('type', 'hostingaccount');
 
 		if (!$result = $builder->execute()) {
 			return $items;
