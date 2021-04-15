@@ -43,8 +43,8 @@ trait HostingSubsystem
 		$builder = $this->createQueryBuilder(Hosting::class, 'e')
 			->innerJoin('e', Product::TABLE_NAME, 'p', 'e.packageid = p.id')
 			->where('e.domainstatus = :status AND p.type = :type')
-			->setParameter('status', 'Active')
-			->setParameter('type', 'hostingaccount');
+			->setParameter('type', 'hostingaccount')
+			->setParameter('status', 'Active');
 
 		if (!$result = $builder->execute()) {
 			return $items;

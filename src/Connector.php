@@ -10,6 +10,7 @@ namespace JuniWalk\WHMCS;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use JuniWalk\WHMCS\Entity\AbstractEntity;
+use JuniWalk\WHMCS\Exceptions\InvalidEntityException;
 use JuniWalk\WHMCS\Exceptions\NoResultException;
 use Nette\Utils\Strings;
 
@@ -99,12 +100,12 @@ class Connector
 	 * @param  string  $tableName
 	 * @param  string  $alias
 	 * @return QueryBuilder
-	 * @throws Exception
+	 * @throws InvalidEntityException
 	 */
 	protected function createQueryBuilder(string $className, string $alias): QueryBuilder
 	{
 		if (!is_subclass_of($className, AbstractEntity::class)) {
-			throw new \Exception;
+			throw InvalidEntityException::fromClass($className);
 		}
 
 		$query = $this->database->createQueryBuilder()
