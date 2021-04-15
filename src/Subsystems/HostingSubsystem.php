@@ -29,4 +29,29 @@ trait HostingSubsystem
 	{
 		return $this->findOneById($hostingId, Hosting::class);
 	}
+
+
+	/**
+	 * @param  string  $query
+	 * @param  callable|null  $where
+	 * @return Client[]
+	 */
+	public function findActiveHostings(): iterable
+	{
+		$items = [];
+		$builder = $this->createQueryBuilder(Hosting::class, 'e')
+			->where('e.domainstatus = :status')
+			->setParameter('status', 'Active');
+
+		if (!$result = $builder->execute()) {
+			return $items;
+		}
+
+		foreach ($result->fetchAllAssociative() as $item) {
+			$item = Hosting::fromResult($item);
+			$items[$item->getId()] = $item;
+		}
+
+		return $items;
+	}
 }
