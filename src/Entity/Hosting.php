@@ -115,4 +115,13 @@ class Hosting extends AbstractEntity
 	{
 		$this->disklimit = $diskLimit;
 	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function isDiskOverLimit(): bool
+	{
+		return $this->diskusage > $this->disklimit;
+	}
 }
