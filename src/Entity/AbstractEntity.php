@@ -17,6 +17,12 @@ abstract class AbstractEntity
 
 
 	/**
+	 * @return int
+	 */
+	abstract public function getId(): int;
+
+
+	/**
 	 * @param  static|null  $self
 	 * @return string[]
 	 * @internal
