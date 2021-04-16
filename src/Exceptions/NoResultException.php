@@ -11,11 +11,17 @@ class NoResultException extends WHMCSException
 {
 	/**
 	 * @param  string  $className
-	 * @param  int  $id
+	 * @param  int|null  $id
 	 * @return self
 	 */
-	public static function fromClass(string $className, int $id): self
+	public static function fromClass(string $className, int $id = null): self
 	{
-		return new static('No results found for '.$className.' using Id '.$id);
+		$message = 'No results found for '.$className;
+
+		if (isset($id)) {
+			$message .= ' using Id '.$id;
+		}
+
+		return new static($message);
 	}
 }

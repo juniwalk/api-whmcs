@@ -10,7 +10,7 @@ namespace JuniWalk\WHMCS\Subsystems;
 use JuniWalk\WHMCS\Entity\CustomField;
 use JuniWalk\WHMCS\Entity\CustomFieldValue;
 
-trait CustomFieldsSubsystem
+trait FieldSubsystem
 {
 	/**
 	 * @param  int  $fieldId
@@ -34,22 +34,14 @@ trait CustomFieldsSubsystem
 
 	/**
 	 * @param  int  $fieldId
-	 * @return CustomField
-	 * @throws NoResultException
+	 * @return CustomFieldValue
 	 */
 	public function getFieldValue(int $fieldId): CustomFieldValue
 	{
-		$builder = $this->createQueryBuilder(CustomFieldValue::class, 'e')
-			->where('e.fieldid = :fieldId')
-			->setParameter('fieldId', $fieldId);
-
-		$result = $builder->execute();
-
-		if (!$result->rowCount()) {
-			throw NoResultException::fromClass(CustomFieldValue::class, $id);
-		}
-
-		return CustomFieldValue::fromResult($result->fetchAssociative());
+		return $this->findOneBy(CustomFieldValue::class, function($qb) use ($fieldId) {
+			$qb->where('e.fieldid = :fieldId');
+			$qb->setParameter('fieldId', $fieldId);
+		});
 	}
 
 
@@ -60,22 +52,13 @@ trait CustomFieldsSubsystem
 	 */
 	public function findFieldByProduct(int $productId, callable $where = null): ?CustomField
 	{
-		$items = [];
-		$builder = $this->createQueryBuilder(CustomField::class, 'e')
-			->where('e.relid = :productId')
-			->setParameter('productId', $productId)
-			->setMaxResults(1);
+		return $this->findOneBy(CustomField::class, function($qb) use ($productId, $where) {
+			$qb->where('e.relid = :productId');
+			$qb->setParameter('productId', $productId);
 
-		if (is_callable($where)) {
-			$builder = $where($builder) ?: $builder;
-		}
-
-		$result = $builder->execute();
-
-		if (!$result->rowCount()) {
-			return null;
-		}
-
-		return CustomField::fromResult($result->fetchAssociative());
+			if (is_callable($where)) {
+				$qb = $where($qb) ?: $qb;
+			}
+		});
 	}
 }

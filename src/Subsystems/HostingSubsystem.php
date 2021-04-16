@@ -33,28 +33,15 @@ trait HostingSubsystem
 
 
 	/**
-	 * @param  string  $query
-	 * @param  callable|null  $where
 	 * @return Hosting[]
 	 */
 	public function findActiveHostings(): iterable
 	{
-		$items = [];
-		$builder = $this->createQueryBuilder(Hosting::class, 'e')
-			->innerJoin('e', Product::TABLE_NAME, 'p', 'e.packageid = p.id')
-			->where('e.domainstatus = :status AND p.type = :type')
-			->setParameter('type', 'hostingaccount')
-			->setParameter('status', 'Active');
-
-		if (!$result = $builder->execute()) {
-			return $items;
-		}
-
-		foreach ($result->fetchAllAssociative() as $item) {
-			$item = Hosting::fromResult($item);
-			$items[$item->getId()] = $item;
-		}
-
-		return $items;
+		return $this->findBy(Hosting::class, function($qb) {
+			$qb->innerJoin('e', Product::TABLE_NAME, 'p', 'e.packageid = p.id');
+			$qb->where('e.domainstatus = :status AND p.type = :type');
+			$qb->setParameter('type', 'hostingaccount');
+			$qb->setParameter('status', 'Active');
+		});
 	}
 }

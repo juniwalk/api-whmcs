@@ -17,7 +17,7 @@ use Nette\Utils\Strings;
 class Connector
 {
 	use Subsystems\ClientSubsystem;
-	use Subsystems\CustomFieldsSubsystem;
+	use Subsystems\FieldSubsystem;
 	use Subsystems\HostingSubsystem;
 	use Subsystems\ProductSubsystem;
 
@@ -65,18 +65,16 @@ class Connector
 	 */
 	public function getOneById(int $id, string $className): AbstractEntity
 	{
-		$query = $this->createQueryBuilder($className, 'e')
-			->where('e.id = :id')
-			->setParameter('id', $id)
-			->setMaxResults(1);
+		try {
+			return $this->getOneBy($className, function($qb) use ($id) {
+				$qb->where('e.id = :id');
+				$qb->setParameter('id', $id);
+			});
 
-		$result = $query->execute();
-
-		if (!$result->rowCount()) {
-			throw NoResultException::fromClass($className, $id);
+		} catch (NoResultException $e) {
 		}
 
-		return $className::fromResult($result->fetchAssociative());
+		throw NoResultException::fromClass($className, $id);
 	}
 
 
@@ -94,6 +92,93 @@ class Connector
 		}
 
 		return null;
+	}
+
+
+	/**
+	 * @param  string  $className
+	 * @param  callable  $where
+	 * @return AbstractEntity|null
+	 */
+	public function findOneBy(string $className, callable $where): ?AbstractEntity
+	{
+		try {
+			return $this->getOneBy($className, $where);
+
+		} catch (NoResultException $e) {
+		}
+
+		return null;
+	}
+
+
+	/**
+	 * @param  string  $className
+	 * @param  callable  $where
+	 * @return AbstractEntity[]
+	 */
+	public function findBy(string $className, callable $where): iterable
+	{
+		try {
+			return $this->getBy($className, $where);
+
+		} catch (NoResultException $e) {
+		}
+
+		return [];
+	}
+
+
+	/**
+	 * @param  string  $className
+	 * @param  callable  $where
+	 * @return AbstractEntity
+	 * @throws NoResultException
+	 */
+	public function getOneBy(string $className, callable $where): AbstractEntity
+	{
+		$builder = $this->createQueryBuilder($className, 'e')
+			->setMaxResults(1);
+
+		if (is_callable($where)) {
+			$builder = $where($builder) ?: $builder;
+		}
+
+		$result = $builder->execute();
+
+		if (!$result->rowCount()) {
+			throw NoResultException::fromClass($className);
+		}
+
+		return $className::fromResult($result->fetchAssociative());
+	}
+
+
+	/**
+	 * @param  string  $className
+	 * @param  callable  $where
+	 * @return AbstractEntity[]
+	 * @throws NoResultException
+	 */
+	public function getBy(string $className, callable $where): iterable
+	{
+		$builder = $this->createQueryBuilder($className, 'e');
+		$items = [];
+
+		if (is_callable($where)) {
+			$builder = $where($builder) ?: $builder;
+		}
+
+		if (!$result = $builder->execute()) {
+			throw NoResultException::fromClass($className);
+		}
+
+		foreach ($result->fetchAllAssociative() as $item) {
+			$item = $className::fromResult($item);
+			$items[$item->getId()] = $item;
+		}
+
+		return $items;
 	}
 
 

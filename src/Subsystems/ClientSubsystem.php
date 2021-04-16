@@ -38,24 +38,15 @@ trait ClientSubsystem
 	 */
 	public function findCliendByName(string $query, callable $where = null): iterable
 	{
-		$items = [];
-		$builder = $this->createQueryBuilder(Client::class, 'e')
-			->where('e.firstname LIKE :query OR e.lastname LIKE :query OR e.companyname LIKE :query')
-			->setParameter('query', "%{$query}%");
+		return $this->findBy(Client::class, function($qb) use ($query, $where) {
+			$qb->orWhere('e.firstname LIKE :query');
+			$qb->orWhere('e.lastname LIKE :query');
+			$qb->orWhere('e.companyname LIKE :query');
+			$qb->setParameter('query', "%{$query}%");
 
-		if (is_callable($where)) {
-			$builder = $where($builder) ?: $builder;
-		}
-
-		if (!$result = $builder->execute()) {
-			return $items;
-		}
-
-		foreach ($result->fetchAllAssociative() as $item) {
-			$item = Client::fromResult($item);
-			$items[$item->getId()] = $item;
-		}
-
-		return $items;
+			if (is_callable($where)) {
+				$qb = $where($qb) ?: $qb;
+			}
+		});
 	}
 }
