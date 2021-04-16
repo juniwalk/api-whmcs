@@ -17,6 +17,7 @@ use Nette\Utils\Strings;
 class Connector
 {
 	use Subsystems\ClientSubsystem;
+	use Subsystems\CustomFieldsSubsystem;
 	use Subsystems\HostingSubsystem;
 	use Subsystems\ProductSubsystem;
 
