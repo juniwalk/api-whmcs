@@ -32,6 +32,21 @@ trait ClientSubsystem
 
 
 	/**
+	 * @param  int[]  $clientIds
+	 * @return Client[]
+	 */
+	public function findClients(iterable $clientIds): iterable
+	{
+		$clientIds = implode(',', $clientIds);
+
+		return $this->getBy(Client::class, function($qb) use ($clientIds) {
+			$qb->where('e.id IN(:clientIds)');
+			$qb->setParameter('clientIds', $clientIds);
+		});
+	}
+
+
+	/**
 	 * @param  string  $query
 	 * @param  callable|null  $where
 	 * @return Client[]
