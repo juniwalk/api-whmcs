@@ -51,7 +51,7 @@ trait ClientSubsystem
 	 * @param  callable|null  $where
 	 * @return Client[]
 	 */
-	public function findCliendByName(string $query, callable $where = null): iterable
+	public function findClientByName(string $query, callable $where = null): iterable
 	{
 		return $this->findBy(Client::class, function($qb) use ($query, $where) {
 			$qb->orWhere('e.firstname LIKE :query');
