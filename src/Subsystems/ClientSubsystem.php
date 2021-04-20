@@ -37,11 +37,11 @@ trait ClientSubsystem
 	 */
 	public function findClients(iterable $clientIds): iterable
 	{
+		$clientIds = array_unique($clientIds);
 		$clientIds = implode(',', $clientIds);
 
 		return $this->getBy(Client::class, function($qb) use ($clientIds) {
-			$qb->where('e.id IN(:clientIds)');
-			$qb->setParameter('clientIds', $clientIds);
+			$qb->where($qb->expr()->in('e.id', $clientIds));
 		});
 	}
 
