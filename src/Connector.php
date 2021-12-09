@@ -8,6 +8,7 @@
 namespace JuniWalk\WHMCS;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use JuniWalk\WHMCS\Entity\AbstractEntity;
 use JuniWalk\WHMCS\Exceptions\InvalidEntityException;
@@ -88,6 +89,7 @@ class Connector
 		try {
 			return $this->getOneById($id, $className);
 
+		} catch (ConnectionException $e) {
 		} catch (NoResultException $e) {
 		}
 
@@ -105,6 +107,7 @@ class Connector
 		try {
 			return $this->getOneBy($className, $where);
 
+		} catch (ConnectionException $e) {
 		} catch (NoResultException $e) {
 		}
 
@@ -122,6 +125,7 @@ class Connector
 		try {
 			return $this->getBy($className, $where);
 
+		} catch (ConnectionException $e) {
 		} catch (NoResultException $e) {
 		}
 
