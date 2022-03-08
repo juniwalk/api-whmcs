@@ -7,12 +7,7 @@
 
 namespace JuniWalk\WHMCS;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder;
-use JuniWalk\WHMCS\Entity\AbstractEntity;
-use JuniWalk\WHMCS\Exceptions\InvalidEntityException;
-use JuniWalk\WHMCS\Exceptions\NoResultException;
-use Nette\Utils\Strings;
+use GuzzleHttp\Client;
 
 class Connector
 {
@@ -21,186 +16,58 @@ class Connector
 	use Subsystems\HostingSubsystem;
 	use Subsystems\ProductSubsystem;
 
-	/** @var Connection */
-	private $database;
+	/** @var string */
+	private $username;
+
+	/** @var string */
+	private $password;
+
+	/** @var Client */
+	private $http;
 
 
 	/**
-	 * @param  Connection  $database
+	 * @param  string  $url
+	 * @param  string  $username
+	 * @param  string  $password
+	 * @param  string[]  $params
 	 */
-	public function __construct(Connection $database)
+	public function __construct(string $url, string $username, string $password, iterable $params = [])
 	{
-		$this->database = $database;
+		$this->username = $username;
+		$this->password = $password;
+		$this->http = new Client($params + [
+			'base_uri' => $url,
+			'timeout' => 2
+		]);
 	}
 
 
 	/**
-	 * @param  AbstractEntity  $entity
-	 * @return void
+	 * @param  string  $action
+	 * @param  string  $params
+	 * @return string[]
 	 */
-	public function persist(AbstractEntity $entity): void
+	protected function call(string $action, iterable $params): iterable
 	{
-		if (!$changes = $entity::listChanges($entity)) {
-			return;
-		}
+		$params = array_merge($params, [
+			'username' => $this->username,
+			'password' => $this->password,
+			'action' => $action,
+			'responsetype' => 'JSON',
+		]);
 
-		$query = $this->database->createQueryBuilder()
-			->update($entity::TABLE_NAME, 'e');
-
-		foreach ($changes as $key => $value) {
-			$query->set('e.'.$key, ':'.$key);
-			$query->setParameter($key, $value);
-		}
-
-		$query->where('e.id = :id')->setParameter('id', $entity->getId());
-		$query->execute();
-	}
-
-
-	/**
-	 * @param  int  $id
-	 * @param  string  $className
-	 * @return AbstractEntity
-	 * @throws NoResultException
-	 */
-	public function getOneById(int $id, string $className): AbstractEntity
-	{
 		try {
-			return $this->getOneBy($className, function($qb) use ($id) {
-				$qb->where('e.id = :id');
-				$qb->setParameter('id', $id);
-			});
+			$response = $http->request('POST', '/includes/api.php', $params);
 
-		} catch (NoResultException $e) {
+		} catch (ClientException $e) {
+			// What shall we do?
 		}
 
-		throw NoResultException::fromClass($className, $id);
-	}
-
-
-	/**
-	 * @param  int  $id
-	 * @param  string  $className
-	 * @return AbstractEntity|null
-	 */
-	public function findOneById(int $id, string $className): ?AbstractEntity
-	{
-		try {
-			return $this->getOneById($id, $className);
-
-		} catch (NoResultException $e) {
+		if ($response->getStatusCode() !== 200) {
+			// What shall we do?
 		}
 
-		return null;
-	}
-
-
-	/**
-	 * @param  string  $className
-	 * @param  callable  $where
-	 * @return AbstractEntity|null
-	 */
-	public function findOneBy(string $className, callable $where): ?AbstractEntity
-	{
-		try {
-			return $this->getOneBy($className, $where);
-
-		} catch (NoResultException $e) {
-		}
-
-		return null;
-	}
-
-
-	/**
-	 * @param  string  $className
-	 * @param  callable  $where
-	 * @return AbstractEntity[]
-	 */
-	public function findBy(string $className, callable $where): iterable
-	{
-		try {
-			return $this->getBy($className, $where);
-
-		} catch (NoResultException $e) {
-		}
-
-		return [];
-	}
-
-
-	/**
-	 * @param  string  $className
-	 * @param  callable  $where
-	 * @return AbstractEntity
-	 * @throws NoResultException
-	 */
-	public function getOneBy(string $className, callable $where): AbstractEntity
-	{
-		$builder = $this->createQueryBuilder($className, 'e')
-			->setMaxResults(1);
-
-		if (is_callable($where)) {
-			$builder = $where($builder) ?: $builder;
-		}
-
-		$result = $builder->execute();
-
-		if (!$result->rowCount()) {
-			throw NoResultException::fromClass($className);
-		}
-
-		return $className::fromResult($result->fetchAssociative());
-	}
-
-
-	/**
-	 * @param  string  $className
-	 * @param  callable  $where
-	 * @return AbstractEntity[]
-	 * @throws NoResultException
-	 */
-	public function getBy(string $className, callable $where): iterable
-	{
-		$builder = $this->createQueryBuilder($className, 'e');
-		$items = [];
-
-		if (is_callable($where)) {
-			$builder = $where($builder) ?: $builder;
-		}
-
-		if (!$result = $builder->execute()) {
-			throw NoResultException::fromClass($className);
-		}
-
-		foreach ($result->fetchAllAssociative() as $item) {
-			$item = $className::fromResult($item);
-			$items[$item->getId()] = $item;
-		}
-
-		return $items;
-	}
-
-
-	/**
-	 * @param  string  $tableName
-	 * @param  string  $alias
-	 * @return QueryBuilder
-	 * @throws InvalidEntityException
-	 */
-	protected function createQueryBuilder(string $className, string $alias): QueryBuilder
-	{
-		if (!is_subclass_of($className, AbstractEntity::class)) {
-			throw InvalidEntityException::fromClass($className);
-		}
-
-		$query = $this->database->createQueryBuilder()
-			->from($className::TABLE_NAME, $alias);
-
-		foreach ($className::listColumns() as $column => $value) {
-			$query->addSelect($alias.'.'.$column);
-		}
-
-		return $query;
+		return json_decode($response->getBody());
 	}
 }
