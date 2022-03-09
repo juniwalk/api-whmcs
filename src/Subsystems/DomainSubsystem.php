@@ -7,6 +7,8 @@
 
 namespace JuniWalk\WHMCS\Subsystems;
 
+use Nette\Schema\Expect;
+
 trait DomainSubsystem
 {
 	/**

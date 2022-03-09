@@ -8,6 +8,7 @@
 namespace JuniWalk\WHMCS;
 
 use GuzzleHttp\Client;
+use Nette\Schema\Expect;
 use Nette\Schema\Processor;
 use Nette\Schema\ValidationException;
 
