@@ -13,6 +13,7 @@ use Nette\Schema\ValidationException;
 
 class Connector
 {
+	use Subsystems\DomainSubsystem;
 	use Subsystems\OrderSubsystem;
 	use Subsystems\UserSubsystem;
 
