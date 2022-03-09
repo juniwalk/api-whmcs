@@ -74,6 +74,6 @@ class Connector
 			// What shall we do?
 		}
 
-		return json_decode($response->getBody(), true);
+		return json_decode($response->getBody()->getContents(), true);
 	}
 }
