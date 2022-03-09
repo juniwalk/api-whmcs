@@ -51,8 +51,10 @@ class Connector
 			'username' => $this->username,
 			'password' => $this->password,
 			'action' => $action,
-			'responsetype' => 'JSON',
+			'responsetype' => 'json',
 		]);
+
+		dump($params);
 
 		try {
 			$response = $this->http->request('POST', '/includes/api.php', $params);
@@ -66,6 +68,6 @@ class Connector
 			// What shall we do?
 		}
 
-		return json_decode($response->getBody());
+		return json_decode($response->getBody(), true);
 	}
 }
