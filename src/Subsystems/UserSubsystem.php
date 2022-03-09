@@ -19,7 +19,7 @@ trait UserSubsystem
 	 * @return string[]
 	 */
 	public function getUsers(
-		?string $search,
+		string $search = null,
 		Sort $sort = Sort::ASC,
 		int $offset = 0,
 		int $limit = 25
