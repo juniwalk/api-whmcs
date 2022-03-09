@@ -61,7 +61,9 @@ class Connector
 		dump($params);
 
 		try {
-			$response = $this->http->request('POST', '/includes/api.php', $params);
+			$response = $this->http->request('POST', '/includes/api.php', [
+				'form_params' => $params,
+			]);
 
 		} catch (ClientException $e) {
 			// What shall we do?
