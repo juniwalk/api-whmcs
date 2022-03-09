@@ -7,8 +7,6 @@
 
 namespace JuniWalk\WHMCS\Subsystems;
 
-// use JuniWalk\WHMCS\Enums\Sort;
-
 trait OrderSubsystem
 {
 	/**

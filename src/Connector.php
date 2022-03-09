@@ -8,6 +8,8 @@
 namespace JuniWalk\WHMCS;
 
 use GuzzleHttp\Client;
+use Nette\Schema\Processor;
+use Nette\Schema\ValidationException;
 
 class Connector
 {
@@ -55,6 +57,7 @@ class Connector
 	 * @param  string  $action
 	 * @param  string  $params
 	 * @return string[]
+	 * @throws ClientException
 	 */
 	protected function call(string $action, iterable $params): iterable
 	{
@@ -81,5 +84,28 @@ class Connector
 		}
 
 		return json_decode($response->getBody()->getContents(), true);
+	}
+
+
+	/**
+	 * @param  string[]  $params
+	 * @param  Expect[]  $schema
+	 * @return string[]
+	 * @throws ValidationException
+	 */
+	protected function check(iterable $params, iterable $schema): iterable
+	{
+		$schema = Expect::structure($schema)
+			->skipDefaults();
+
+		try {
+			$params = (new Processor)->process($schema, $params);
+
+		} catch (ValidationException $e) {
+			// What shall we do?
+			throw $e;
+		}
+
+		return $params;
 	}
 }
