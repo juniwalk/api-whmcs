@@ -11,6 +11,7 @@ use GuzzleHttp\Client;
 
 class Connector
 {
+	use Subsystems\OrderSubsystem;
 	use Subsystems\UserSubsystem;
 
 	/** @var string */
