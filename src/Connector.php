@@ -32,8 +32,12 @@ class Connector
 	 * @param  string  $secret
 	 * @param  string[]  $params
 	 */
-	public function __construct(string $url, string $identifier, string $secret, iterable $params = [])
-	{
+	public function __construct(
+		string $url,
+		string $identifier,
+		string $secret,
+		iterable $params = []
+	) {
 		$this->identifier = $identifier;
 		$this->secret = $secret;
 		$this->http = new Client($params + [
@@ -57,8 +61,6 @@ class Connector
 			'action' => $action,
 			'responsetype' => 'json',
 		]);
-
-		dump($params);
 
 		try {
 			$response = $this->http->request('POST', '/includes/api.php', [
