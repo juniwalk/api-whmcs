@@ -11,10 +11,7 @@ use GuzzleHttp\Client;
 
 class Connector
 {
-	use Subsystems\ClientSubsystem;
-	use Subsystems\FieldSubsystem;
-	use Subsystems\HostingSubsystem;
-	use Subsystems\ProductSubsystem;
+	use Subsystems\UserSubsystem;
 
 	/** @var string */
 	private $username;
