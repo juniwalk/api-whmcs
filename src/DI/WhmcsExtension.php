@@ -1,13 +1,12 @@
 <?php declare(strict_types=1);
 
 /**
- * @copyright Martin Procházka (c) 2021
+ * @copyright Martin Procházka (c) 2022
  * @license   MIT License
  */
 
 namespace JuniWalk\WHMCS\DI;
 
-use Doctrine\DBAL\DriverManager;
 use JuniWalk\WHMCS\Connector;
 use Nette\DI\CompilerExtension;
 use Nette\Schema\Expect;
@@ -21,16 +20,14 @@ final class WhmcsExtension extends CompilerExtension
 	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
-			'dbname' => Expect::string()->required(),
-			'user' => Expect::string()->required(),
-			'password' => Expect::string()->required(),
-			'host' => Expect::string('localhost'),
-			'port' => Expect::int(),
-			'driver' => Expect::string('pdo_mysql'),
-			'charset' => Expect::string(),
-		])
-
-		->castTo('array');
+			'url' => Expect::string()->required(),
+			'identifier' => Expect::string()->required(),
+			'secret' => Expect::string()->required(),
+			'accessKey' => Expect::string(),
+			'params' => Expect::structure()
+				->otherItems(Expect::string())
+				->castTo('array'),
+		]);
 	}
 
 
@@ -42,11 +39,7 @@ final class WhmcsExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 
-		$builder->addDefinition($this->prefix('database'))
-			->setFactory(DriverManager::class.'::getConnection', [$config])
-			->setAutowired(false);
-
 		$builder->addDefinition($this->prefix('connector'))
-			->setFactory(Connector::class, ['@'.$this->prefix('database')]);
+			->setFactory(Connector::class, [$config]);
 	}
 }
