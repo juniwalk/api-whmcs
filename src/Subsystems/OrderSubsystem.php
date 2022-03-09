@@ -12,18 +12,18 @@ namespace JuniWalk\WHMCS\Subsystems;
 trait OrderSubsystem
 {
 	/**
+	 * @param  string $productId
 	 * @param  string|null  $module
 	 * @param  int|null  $groupId
-	 * @param  int ... $productId
 	 * @return string[]
 	 */
 	public function getProducts(
-		string $module = null,
+		string $productId,
 		int $groupId = null,
-		int ... $productId
+		string $module = null
 	): iterable {
 		return $this->call('GetProducts', [
-			'pid' => implode(',', $productId),
+			'pid' => $productId,
 			'gid' => $groupId,
 			'module' => $module,
 		]);
