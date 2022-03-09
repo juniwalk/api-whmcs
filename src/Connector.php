@@ -98,7 +98,8 @@ class Connector
 	protected function check(iterable $params, iterable $schema): iterable
 	{
 		$schema = Expect::structure($schema)
-			->skipDefaults();
+			->skipDefaults()
+			->castTo('array');
 
 		try {
 			$params = (new Processor)->process($schema, $params);
