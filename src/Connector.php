@@ -14,10 +14,10 @@ class Connector
 	use Subsystems\UserSubsystem;
 
 	/** @var string */
-	private $username;
+	private $identifier;
 
 	/** @var string */
-	private $password;
+	private $secret;
 
 	/** @var Client */
 	private $http;
@@ -25,14 +25,14 @@ class Connector
 
 	/**
 	 * @param  string  $url
-	 * @param  string  $username
-	 * @param  string  $password
+	 * @param  string  $identifier
+	 * @param  string  $secret
 	 * @param  string[]  $params
 	 */
-	public function __construct(string $url, string $username, string $password, iterable $params = [])
+	public function __construct(string $url, string $identifier, string $secret, iterable $params = [])
 	{
-		$this->username = $username;
-		$this->password = $password;
+		$this->identifier = $identifier;
+		$this->secret = $secret;
 		$this->http = new Client($params + [
 			'base_uri' => $url,
 			'timeout' => 2
@@ -48,8 +48,8 @@ class Connector
 	protected function call(string $action, iterable $params): iterable
 	{
 		$params = array_merge($params, [
-			'username' => $this->username,
-			'password' => $this->password,
+			'identifier' => $this->identifier,
+			'secret' => $this->secret,
 			'action' => $action,
 			'responsetype' => 'json',
 		]);
