@@ -16,10 +16,8 @@ trait DomainSubsystem
 	 * @param  mixed[]  $params
 	 * @return bool
 	 */
-	public function updateClientDomain(
-		int $domainId,
-		iterable $params
-	): bool {
+	public function updateClientDomain(int $domainId, iterable $params): bool
+	{
 		$params['domainid'] = $domainId;
 		$params = $this->check($params, [
 			'domainid'				=> Expect::int()->required(),
@@ -27,7 +25,7 @@ trait DomainSubsystem
 			'emailforwarding'		=> Expect::bool(),
 			'idprotection'			=> Expect::bool(),
 			'donotrenew'			=> Expect::bool(),
-			'type'					=> Expect::string(),
+			'type'					=> Expect::string(),	// Transfer, Register
 			'regdate'				=> Expect::string(),
 			'nextduedate'			=> Expect::string(),
 			'expirydate'			=> Expect::string(),
@@ -38,7 +36,7 @@ trait DomainSubsystem
 			'regperiod'				=> Expect::int(),
 			'paymentmethod'			=> Expect::string(),
 			'subscriptionid'		=> Expect::string(),
-			'status'				=> Expect::string(),
+			'status'				=> Expect::string(),	// Active, Cancelled, Terminated
 			'notes'					=> Expect::string(),
 			'promoid'				=> Expect::int(),
 			'autorecalc'			=> Expect::bool(),
@@ -49,8 +47,6 @@ trait DomainSubsystem
 			'ns4'					=> Expect::string(),
 			'ns5'					=> Expect::string(),
 		]);
-
-		dumpe($params);
 
 		$response = $this->call('UpdateClientDomain', $params);
 		return $response['result'] === 'success';
