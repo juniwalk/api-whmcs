@@ -30,16 +30,19 @@ class Connector
 	 * @param  string  $url
 	 * @param  string  $identifier
 	 * @param  string  $secret
+	 * @param  string  $accessKey
 	 * @param  string[]  $params
 	 */
 	public function __construct(
 		string $url,
 		string $identifier,
 		string $secret,
+		string $accessKey = null,
 		iterable $params = []
 	) {
 		$this->identifier = $identifier;
 		$this->secret = $secret;
+		$this->accessKey = $accessKey;
 		$this->http = new Client($params + [
 			'base_uri' => $url,
 			'timeout' => 2
