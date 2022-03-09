@@ -55,7 +55,7 @@ class Connector
 		]);
 
 		try {
-			$response = $http->request('POST', '/includes/api.php', $params);
+			$response = $this->http->request('POST', '/includes/api.php', $params);
 
 		} catch (ClientException $e) {
 			// What shall we do?
