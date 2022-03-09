@@ -19,6 +19,9 @@ class Connector
 	/** @var string */
 	private $secret;
 
+	/** @var string */
+	private $accessKey;
+
 	/** @var Client */
 	private $http;
 
@@ -50,6 +53,7 @@ class Connector
 		$params = array_merge($params, [
 			'identifier' => $this->identifier,
 			'secret' => $this->secret,
+			'accesskey' => $this->accessKey,
 			'action' => $action,
 			'responsetype' => 'json',
 		]);
