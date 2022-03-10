@@ -15,6 +15,7 @@ trait DomainSubsystem
 	 * @param  int $domainId
 	 * @param  mixed[]  $params
 	 * @return bool
+	 * @see https://developers.whmcs.com/api-reference/updateclientdomain/
 	 */
 	public function updateClientDomain(int $domainId, iterable $params): bool
 	{
