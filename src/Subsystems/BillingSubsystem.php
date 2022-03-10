@@ -72,36 +72,16 @@ trait BillingSubsystem
 			'duedate'				=> Expect::string(),
 			'datepaid'				=> Expect::string(),
 			'note'					=> Expect::string(),
-			'item'					=> Expect::arrayOf(Expect::structure([
-				'description'		=> Expect::string()->required(),
-				'amount'			=> Expect::float()->required(),
-				'taxed'				=> Expect::bool()->required(),
-			])->castTo('array')),
-			'newitem'				=> Expect::arrayOf(Expect::structure([
-				'description'		=> Expect::string()->required(),
-				'amount'			=> Expect::float()->required(),
-				'taxed'				=> Expect::bool()->required(),
-			])->castTo('array')),
+			'itemdescription'		=> Expect::arrayOf('string'),
+			'itemamount'			=> Expect::arrayOf('float'),
+			'itemtaxed'				=> Expect::arrayOf('bool'),
+			'newitemdescription'	=> Expect::arrayOf('string'),
+			'newitemamount'			=> Expect::arrayOf('float'),
+			'newitemtaxed'			=> Expect::arrayOf('bool'),
 			'deletelineids'			=> Expect::arrayOf('int'),
 			'publish'				=> Expect::bool(),
 			'publishandsendemail'	=> Expect::bool(),
 		]);
-
-		foreach ($params['item'] as $itemId => $item) {
-			$params['itemdescription'][$itemId] = $item['description'];
-			$params['itemamount'][$itemId] = $item['amount'];
-			$params['itemtaxed'][$itemId] = $item['taxed'];
-		}
-
-		foreach ($params['newitem'] as $itemId => $item) {
-			$params['newitemdescription'][$itemId] = $item['description'];
-			$params['newitemamount'][$itemId] = $item['amount'];
-			$params['newitemtaxed'][$itemId] = $item['taxed'];
-		}
-
-		unset($params['item'], $params['newitem']);
-
-		dumpe($params);
 
 		$response = $this->call('UpdateInvoice', $params);
 		return $response['result'] === 'success';
