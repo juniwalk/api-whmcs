@@ -87,6 +87,20 @@ trait BillingSubsystem
 			'publishandsendemail'	=> Expect::bool(),
 		]);
 
+		foreach ($params['item'] as $itemId => $item) {
+			$params['itemdescription'][$itemId] = $item['description'];
+			$params['itemamount'][$itemId] = $item['amount'];
+			$params['itemtaxed'][$itemId] = $item['taxed'];
+		}
+
+		foreach ($params['newitem'] as $itemId => $item) {
+			$params['newitemdescription'][$itemId] = $item['description'];
+			$params['newitemamount'][$itemId] = $item['amount'];
+			$params['newitemtaxed'][$itemId] = $item['taxed'];
+		}
+
+		unset($params['item'], $params['newitem']);
+
 		dumpe($params);
 
 		$response = $this->call('UpdateInvoice', $params);
