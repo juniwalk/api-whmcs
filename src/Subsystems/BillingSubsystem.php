@@ -31,9 +31,9 @@ trait BillingSubsystem
 		return $this->call('GetInvoices', [
 			'limitstart' => $offset,
 			'limitnum' => $limit,
-			'userid' => null,
-			'status' => null,			// Draft, Paid, Unpaid, Cancelled, Overdue
-			'orderby' => null,
+			'userid' => $userId,
+			'status' => $status,			// Draft, Paid, Unpaid, Cancelled, Overdue
+			'orderby' => $orderBy,
 			'order' => $sort,
 		]);
 	}
