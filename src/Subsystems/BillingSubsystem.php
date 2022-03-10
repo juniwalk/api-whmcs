@@ -72,12 +72,12 @@ trait BillingSubsystem
 			'duedate'				=> Expect::string(),
 			'datepaid'				=> Expect::string(),
 			'note'					=> Expect::string(),
-			'item'					=> Expect::listOf(Expect::structure([
+			'item'					=> Expect::arrayOf(Expect::structure([
 				'description'		=> Expect::string()->required(),
 				'amount'			=> Expect::float()->required(),
 				'taxed'				=> Expect::bool()->required(),
 			])),
-			'newitem'				=> Expect::listOf(Expect::structure([
+			'newitem'				=> Expect::arrayOf(Expect::structure([
 				'description'		=> Expect::string()->required(),
 				'amount'			=> Expect::float()->required(),
 				'taxed'				=> Expect::bool()->required(),
