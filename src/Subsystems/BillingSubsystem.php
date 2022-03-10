@@ -13,6 +13,18 @@ namespace JuniWalk\WHMCS\Subsystems;
 trait BillingSubsystem
 {
 	/**
+	 * @param  int  $invoiceId
+	 * @return string[]
+	 * @see https://developers.whmcs.com/api-reference/getinvoice/
+	 */
+	public function getInvoice(int $invoiceId): iterable {
+		return $this->call('GetInvoice', [
+			'invoiceid' => $invoiceId,
+		]);
+	}
+
+
+	/**
 	 * @param  string|null  $search
 	 * @param  string  $sort
 	 * @param  int  $offset
