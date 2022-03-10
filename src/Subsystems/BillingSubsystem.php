@@ -14,6 +14,36 @@ use Nette\Schema\Expect;
 trait BillingSubsystem
 {
 	/**
+	 * @param  int $paymentMethod
+	 * @param  mixed[]  $params
+	 * @return bool
+	 * @see https://developers.whmcs.com/api-reference/addtransaction/
+	 */
+	public function addTransaction(string $paymentMethod, iterable $params): bool
+	{
+		$params['paymentMethod'] = $paymentMethod;
+		$params = $this->check($params, [
+			'paymentmethod'			=> Expect::string()->required(),
+			'userid'				=> Expect::int(),
+			'invoiceid'				=> Expect::int(),
+			'transid'				=> Expect::string(),
+			'date'					=> Expect::string(),
+			'currencyid'			=> Expect::int(),
+			'description'			=> Expect::string(),
+			'amountin'				=> Expect::float(),
+			'fees'					=> Expect::float(),
+			'amountout'				=> Expect::float(),
+			'rate'					=> Expect::float(),
+			'credit'				=> Expect::bool(),
+			'allowduplicatetransid'	=> Expect::bool(),
+		]);
+
+		$response = $this->call('AddTransaction', $params);
+		return $response['result'] === 'success';
+	}
+
+
+	/**
 	 * @param  int  $invoiceId
 	 * @return string[]
 	 * @see https://developers.whmcs.com/api-reference/getinvoice/
