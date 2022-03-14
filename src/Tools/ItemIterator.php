@@ -10,13 +10,13 @@ namespace JuniWalk\WHMCS\Tools;
 class ItemIterator extends \ArrayIterator
 {
 	/** @var int */
-	private $totalResults;
+	protected $totalResults;
 
 	/** @var int */
-	private $offset;
+	protected $offset;
 
 	/** @var int */
-	private $limit;
+	protected $limit;
 
 
 	/**
