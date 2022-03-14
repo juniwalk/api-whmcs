@@ -9,68 +9,68 @@ namespace JuniWalk\WHMCS\Tools;
 
 class ItemIterator extends \ArrayIterator
 {
-	/** @var int */
+	/** @var int|null */
 	protected $totalResults;
 
-	/** @var int */
+	/** @var int|null */
 	protected $offset;
 
-	/** @var int */
+	/** @var int|null */
 	protected $limit;
 
 
 	/**
-	 * @param  int  $totalResults
+	 * @param  int|null  $totalResults
 	 * @return void
 	 */
-	public function setTotalResults(int $totalResults): void
+	public function setTotalResults(?int $totalResults): void
 	{
 		$this->totalResults = $totalResults;
 	}
 
 
 	/**
-	 * @return int
+	 * @return int|null
 	 */
-	public function getTotalResults(): int
+	public function getTotalResults(): ?int
 	{
 		return $this->totalResults;
 	}
 
 
 	/**
-	 * @param  int  $offset
+	 * @param  int|null  $offset
 	 * @return void
 	 */
-	public function setOffset(int $offset): void
+	public function setOffset(?int $offset): void
 	{
 		$this->offset = $offset;
 	}
 
 
 	/**
-	 * @return int
+	 * @return int|null
 	 */
-	public function getOffset(): int
+	public function getOffset(): ?int
 	{
 		return $this->offset;
 	}
 
 
 	/**
-	 * @param  int  $limit
+	 * @param  int|null  $limit
 	 * @return void
 	 */
-	public function setLimit(int $limit): void
+	public function setLimit(?int $limit): void
 	{
 		$this->limit = $limit;
 	}
 
 
 	/**
-	 * @return int
+	 * @return int|null
 	 */
-	public function getLimit(): int
+	public function getLimit(): ?int
 	{
 		return $this->limit;
 	}
