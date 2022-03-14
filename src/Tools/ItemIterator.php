@@ -7,7 +7,7 @@
 
 namespace JuniWalk\WHMCS\Tools;
 
-class ItemIterator extends ArrayIterator
+class ItemIterator extends \ArrayIterator
 {
 	/** @var int */
 	private $totalResults;
