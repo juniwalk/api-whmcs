@@ -35,8 +35,8 @@ trait UserSubsystem
 
 		$items = new ItemIterator($data['users']);
 		$items->setTotalResults($data['totalresults']);
-		$items->setOffset($offset);
-		$items->setLimit($limit);
+		$items->setOffset($data['startnumber']);
+		$items->setLimit($data['numreturned']);
 		return $items;
 	}
 }
