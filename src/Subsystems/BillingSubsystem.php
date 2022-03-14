@@ -9,6 +9,7 @@ namespace JuniWalk\WHMCS\Subsystems;
 
 // use JuniWalk\WHMCS\Enums\InvoiceStatus;
 // use JuniWalk\WHMCS\Enums\Sort;
+use JuniWalk\WHMCS\Tools\ItemIterator;
 use Nette\Schema\Expect;
 
 trait BillingSubsystem
@@ -70,8 +71,8 @@ trait BillingSubsystem
 		string $sort = 'ASC',
 		int $offset = 0,
 		int $limit = 25
-	): iterable {
-		return $this->call('GetInvoices', [
+	): ItemIterator {
+		$data = $this->call('GetInvoices', [
 			'limitstart' => $offset,
 			'limitnum' => $limit,
 			'userid' => $userId,
@@ -79,6 +80,13 @@ trait BillingSubsystem
 			'orderby' => $orderBy,
 			'order' => $sort,
 		]);
+
+		$items = new ItemIterator($data['invoices']['invoice']);
+		$items->setTotalResults($data['totalresults']);
+		$items->setStartNumber($data['startnumber']);
+		$items->setNumberReturned($data['numreturned']);
+
+		return $items;
 	}
 
 
