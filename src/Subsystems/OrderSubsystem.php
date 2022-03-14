@@ -7,6 +7,8 @@
 
 namespace JuniWalk\WHMCS\Subsystems;
 
+use JuniWalk\WHMCS\Tools\ItemIterator;
+
 trait OrderSubsystem
 {
 	/**
@@ -20,11 +22,17 @@ trait OrderSubsystem
 		string $productId,
 		int $groupId = null,
 		string $module = null
-	): iterable {
-		return $this->call('GetProducts', [
+	): ItemIterator {
+		$data = $this->call('GetProducts', [
 			'pid' => $productId,
 			'gid' => $groupId,
 			'module' => $module,
 		]);
+
+		$items = new ItemIterator($data['products']['product']);
+		$items->setTotalResults($data['totalresults']);
+		$items->setOffset($offset);
+		$items->setLimit($limit);
+		return $items;
 	}
 }

@@ -85,7 +85,6 @@ trait BillingSubsystem
 		$items->setTotalResults($data['totalresults']);
 		$items->setOffset($offset);
 		$items->setLimit($limit);
-
 		return $items;
 	}
 
