@@ -13,10 +13,10 @@ class ItemIterator extends \ArrayIterator
 	private $totalResults;
 
 	/** @var int */
-	private $startNumber;
+	private $offset;
 
 	/** @var int */
-	private $numberReturned;
+	private $limit;
 
 
 	/**
@@ -39,39 +39,39 @@ class ItemIterator extends \ArrayIterator
 
 
 	/**
-	 * @param  int  $startNumber
+	 * @param  int  $offset
 	 * @return void
 	 */
-	public function setStartNumber(int $startNumber): void
+	public function setOffset(int $offset): void
 	{
-		$this->startNumber = $startNumber;
+		$this->offset = $offset;
 	}
 
 
 	/**
 	 * @return int
 	 */
-	public function getStartNumber(): int
+	public function getOffset(): int
 	{
-		return $this->startNumber;
+		return $this->offset;
 	}
 
 
 	/**
-	 * @param  int  $numberReturned
+	 * @param  int  $limit
 	 * @return void
 	 */
-	public function setNumberReturned(int $numberReturned): void
+	public function setLimit(int $limit): void
 	{
-		$this->numberReturned = $numberReturned;
+		$this->limit = $limit;
 	}
 
 
 	/**
 	 * @return int
 	 */
-	public function getNumberReturned(): int
+	public function getLimit(): int
 	{
-		return $this->numberReturned;
+		return $this->limit;
 	}
 }

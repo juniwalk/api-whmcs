@@ -83,8 +83,8 @@ trait BillingSubsystem
 
 		$items = new ItemIterator($data['invoices']['invoice']);
 		$items->setTotalResults($data['totalresults']);
-		$items->setStartNumber($data['startnumber']);
-		$items->setNumberReturned($data['numreturned']);
+		$items->setOffset($offset);
+		$items->setLimit($limit);
 
 		return $items;
 	}
