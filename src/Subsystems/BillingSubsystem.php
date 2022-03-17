@@ -45,6 +45,32 @@ trait BillingSubsystem
 
 
 	/**
+	 * @param  int|null  $invoiceId
+	 * @param  int|null  $clientId
+	 * @param  string|null  $transactionId
+	 * @return string[]
+	 * @see https://developers.whmcs.com/api-reference/gettransactions/
+	 */
+	public function getTransactions(
+		int $invoiceId = null,
+		int $clientId = null,
+		string $transactionId = null
+	): ItemIterator {
+		$data = $this->call('GetTransactions', [
+			'invoiceid' => $invoiceId,
+			'clientid' => $clientId,
+			'transid' => $transactionId,
+		]);
+
+		$items = new ItemIterator($data['transactions']['transaction']);
+		$items->setTotalResults($data['totalresults']);
+		$items->setOffset($data['startnumber']);
+		$items->setLimit($data['numreturned']);
+		return $items;
+	}
+
+
+	/**
 	 * @param  int  $invoiceId
 	 * @return string[]
 	 * @see https://developers.whmcs.com/api-reference/getinvoice/
