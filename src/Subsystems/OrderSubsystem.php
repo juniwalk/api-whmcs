@@ -31,8 +31,8 @@ trait OrderSubsystem
 
 		$items = new ItemIterator($data['products']['product']);
 		$items->setTotalResults($data['totalresults']);
-		$items->setOffset($data['startnumber']);
-		$items->setLimit($data['numreturned']);
+		$items->setOffset($data['startnumber'] ?? 0);
+		$items->setLimit($data['numreturned'] ?? 0);
 		return $items;
 	}
 }
