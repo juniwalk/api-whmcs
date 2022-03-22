@@ -27,7 +27,7 @@ final class WhmcsExtension extends CompilerExtension
 			'params' => Expect::structure([])
 				->otherItems(Expect::string())
 				->castTo('array'),
-		]);
+		])->castTo('array');
 	}
 
 
@@ -40,6 +40,6 @@ final class WhmcsExtension extends CompilerExtension
 		$config = $this->getConfig();
 
 		$builder->addDefinition($this->prefix('connector'))
-			->setFactory(Connector::class, [$config]);
+			->setFactory(Connector::class, $config);
 	}
 }
