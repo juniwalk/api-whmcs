@@ -19,7 +19,7 @@ trait OrderSubsystem
 	 * @see https://developers.whmcs.com/api-reference/getproducts/
 	 */
 	public function getProducts(
-		string $productId,
+		string $productId = '',
 		int $groupId = null,
 		string $module = null
 	): ItemIterator {
