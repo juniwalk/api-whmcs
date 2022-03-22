@@ -24,7 +24,7 @@ final class WhmcsExtension extends CompilerExtension
 			'identifier' => Expect::string()->required(),
 			'secret' => Expect::string()->required(),
 			'accessKey' => Expect::string(),
-			'params' => Expect::structure()
+			'params' => Expect::structure([])
 				->otherItems(Expect::string())
 				->castTo('array'),
 		]);
