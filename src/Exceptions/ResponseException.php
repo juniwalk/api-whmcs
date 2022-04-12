@@ -5,7 +5,7 @@
  * @license   MIT License
  */
 
-namespace JuniWalk\HWMCS\Exceptions;
+namespace JuniWalk\WHMCS\Exceptions;
 
 final class ResponseException extends AbstractException
 {
