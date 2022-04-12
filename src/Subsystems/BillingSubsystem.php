@@ -22,7 +22,7 @@ trait BillingSubsystem
 	 */
 	public function addTransaction(string $paymentMethod, iterable $params): bool
 	{
-		$params['paymentMethod'] = $paymentMethod;
+		$params['paymentmethod'] = $paymentMethod;
 		$params = $this->check($params, [
 			'paymentmethod'			=> Expect::string()->required(),
 			'userid'				=> Expect::int(),
