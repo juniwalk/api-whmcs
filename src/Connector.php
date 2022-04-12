@@ -86,7 +86,7 @@ class Connector
 		$result = $response->getBody()->getContents();
 		$result = json_decode($result, true);
 
-		if ($result['result'] === 'error') {
+		if (($result['result'] ?? $result['status']) === 'error') {
 			throw ResponseException::fromResult($action, $result);
 		}
 
