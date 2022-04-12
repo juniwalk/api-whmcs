@@ -8,6 +8,7 @@
 namespace JuniWalk\WHMCS;
 
 use GuzzleHttp\Client;
+use JuniWalk\WHMCS\Exceptions\ResponseException;
 use Nette\Schema\Expect;
 use Nette\Schema\Processor;
 use Nette\Schema\ValidationException;
@@ -51,7 +52,7 @@ class Connector
 		$this->accessKey = $accessKey;
 		$this->http = new Client($params + [
 			'base_uri' => $url,
-			'timeout' => 2
+			'timeout' => 6
 		]);
 	}
 
@@ -61,6 +62,7 @@ class Connector
 	 * @param  string  $params
 	 * @return string[]
 	 * @throws ClientException
+	 * @throws ResponseException
 	 */
 	protected function call(string $action, iterable $params): iterable
 	{
@@ -78,15 +80,17 @@ class Connector
 			]);
 
 		} catch (ClientException $e) {
-			// What shall we do?
 			throw $e;
 		}
 
-		if ($response->getStatusCode() !== 200) {
-			// What shall we do?
+		$result = $response->getBody()->getContents();
+		$result = json_decode($result, true);
+
+		if ($result['result'] === 'error') {
+			throw ResponseException::fromResult($action, $result);
 		}
 
-		return json_decode($response->getBody()->getContents(), true);
+		return $result;
 	}
 
 
@@ -106,7 +110,6 @@ class Connector
 			$params = (new Processor)->process($schema, $params);
 
 		} catch (ValidationException $e) {
-			// What shall we do?
 			throw $e;
 		}
 
