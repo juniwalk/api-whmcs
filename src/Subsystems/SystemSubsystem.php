@@ -22,7 +22,7 @@ trait SystemSubsystem
 	{
 		$data = $this->call('GetCurrencies');
 
-		$items = new ItemIterator($data['currencies']);
+		$items = new ItemIterator($data['currencies']['currency']);
 		$items->setTotalResults($data['totalresults']);
 		$items->setOffset($data['startnumber'] ?? 0);
 		$items->setLimit($data['numreturned'] ?? 0);
