@@ -18,6 +18,7 @@ class Connector
 	use Subsystems\BillingSubsystem;
 	use Subsystems\DomainSubsystem;
 	use Subsystems\OrderSubsystem;
+	use Subsystems\SystemSubsystem;
 	use Subsystems\UserSubsystem;
 
 	/** @var string */
