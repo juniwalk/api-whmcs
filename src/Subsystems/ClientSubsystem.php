@@ -9,6 +9,7 @@ namespace JuniWalk\WHMCS\Subsystems;
 
 // use JuniWalk\WHMCS\Enums\Sort;
 use JuniWalk\WHMCS\Tools\ItemIterator;
+use Nette\Schema\Expect;
 
 trait ClientSubsystem
 {
