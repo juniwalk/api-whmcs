@@ -25,9 +25,9 @@ trait ClientSubsystem
 	): ItemIterator
 	{
 		$params = $this->check($params, [
-			'clientid'		=> Expect::int(),
-			'domainid'		=> Expect::int(),
-			'domain'		=> Expect::string(),
+			'clientid'	=> Expect::int(),
+			'domainid'	=> Expect::int(),
+			'domain'	=> Expect::string(),
 		]);
 
 		$data = $this->call('GetClientsDomains', $params + [
