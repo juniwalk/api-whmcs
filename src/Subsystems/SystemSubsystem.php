@@ -12,9 +12,6 @@ use JuniWalk\WHMCS\Tools\ItemIterator;
 trait SystemSubsystem
 {
 	/**
-	 * @param  string $productId
-	 * @param  string|null  $module
-	 * @param  int|null  $groupId
 	 * @return string[]
 	 * @see https://developers.whmcs.com/api-reference/getcurrencies/
 	 */

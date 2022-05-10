@@ -15,6 +15,7 @@ use Nette\Schema\ValidationException;
 
 class Connector
 {
+	use Subsystems\ClientSubsystem;
 	use Subsystems\BillingSubsystem;
 	use Subsystems\DomainSubsystem;
 	use Subsystems\OrderSubsystem;
