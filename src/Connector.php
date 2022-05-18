@@ -18,9 +18,16 @@ class Connector
 	use Subsystems\ClientSubsystem;
 	use Subsystems\BillingSubsystem;
 	use Subsystems\DomainSubsystem;
+	use Subsystems\LinkSubsystem;
 	use Subsystems\OrderSubsystem;
 	use Subsystems\SystemSubsystem;
 	use Subsystems\UserSubsystem;
+
+	/** @var string */
+	private $url;
+
+	/** @var string */
+	private $adminDir;
 
 	/** @var string */
 	private $identifier;
@@ -39,6 +46,7 @@ class Connector
 	 * @param  string  $url
 	 * @param  string  $identifier
 	 * @param  string  $secret
+	 * @param  string  $adminDir
 	 * @param  string  $accessKey
 	 * @param  string[]  $params
 	 */
@@ -46,11 +54,14 @@ class Connector
 		string $url,
 		string $identifier,
 		string $secret,
+		string $adminDir,
 		string $accessKey = null,
 		iterable $params = []
 	) {
+		$this->url = $url;
 		$this->identifier = $identifier;
 		$this->secret = $secret;
+		$this->adminDir = $adminDir;
 		$this->accessKey = $accessKey;
 		$this->http = new Client($params + [
 			'base_uri' => $url,
