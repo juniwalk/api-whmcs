@@ -35,7 +35,7 @@ trait ClientSubsystem
 			'limitnum' => $limit,
 		]);
 
-		$items = new ItemIterator($data['domains']);
+		$items = new ItemIterator($data['domains']['domain']);
 		$items->setTotalResults($data['totalresults']);
 		$items->setOffset($data['startnumber']);
 		$items->setLimit($data['numreturned']);
