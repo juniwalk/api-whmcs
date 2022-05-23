@@ -77,7 +77,7 @@ class Connector
 	 * @throws ClientException
 	 * @throws ResponseException
 	 */
-	protected function call(string $action, iterable $params = []): iterable
+	public function call(string $action, iterable $params = []): iterable
 	{
 		$params = array_merge($params, [
 			'identifier' => $this->identifier,
