@@ -88,7 +88,7 @@ trait BillingSubsystem
 			'limitstart' => $offset,
 			'limitnum' => $limit,
 			'userid' => $userId,
-			'status' => $status->name,
+			'status' => $status?->name,
 			'orderby' => $orderBy,
 			'order' => $sort->name,
 		]);

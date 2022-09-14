@@ -27,7 +27,7 @@ trait ClientSubsystem
 	): ItemIterator {
 		$data = $this->call('GetClients', [
 			'search' => $search,
-			'status' => $status->name,
+			'status' => $status?->name,
 			'orderby' => $orderBy,
 			'sorting' => $sort->name,
 			'limitstart' => $offset,
