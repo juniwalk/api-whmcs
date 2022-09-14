@@ -31,7 +31,7 @@ class Connector
 		private string $identifier,
 		private string $secret,
 		private string $adminDir,
-		private string $accessKey = null,
+		private ?string $accessKey = null,
 		iterable $params = []
 	) {
 		$this->http = new Client($params + [
