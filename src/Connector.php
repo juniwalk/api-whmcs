@@ -12,6 +12,7 @@ use JuniWalk\WHMCS\Exceptions\ResponseException;
 use Nette\Schema\Expect;
 use Nette\Schema\Processor;
 use Nette\Schema\ValidationException;
+use UnitEnum;
 
 class Connector
 {
@@ -89,6 +90,14 @@ class Connector
 
 		} catch (ValidationException $e) {
 			throw $e;
+		}
+
+		foreach ($params as $key => $value) {
+			if (!$value instanceof UnitEnum) {
+				continue;
+			}
+
+			$params[$key] = $value->name;
 		}
 
 		return $params;

@@ -112,7 +112,7 @@ trait BillingSubsystem
 		$params['invoiceid'] = $invoiceId;
 		$params = $this->check($params, [
 			'invoiceid'				=> Expect::int()->required(),
-			'status'				=> Expect::string(),
+			'status'				=> Expect::type(InvoiceStatus::class),
 			'paymentmethod'			=> Expect::string(),
 			'taxrate'				=> Expect::float(),
 			'taxrate2'				=> Expect::float(),
