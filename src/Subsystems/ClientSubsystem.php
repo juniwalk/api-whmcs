@@ -14,8 +14,34 @@ use Nette\Schema\Expect;
 trait ClientSubsystem
 {
 	/**
-	 * @param  string[]  $params
-	 * @return string[]
+	 * @see https://developers.whmcs.com/api-reference/getclients/
+	 */
+	public function getClients(
+		string $search = null,
+		string $status = null,		// Active, Inactive, Closed
+		string $orderBy = null,
+		string $sort = 'ASC',
+		int $offset = 0,
+		int $limit = 25
+	): ItemIterator {
+		$data = $this->call('GetClients', [
+			'search' => $search,
+			'status' => $status,
+			'orderby' => $orderBy,
+			'sorting' => $sort,
+			'limitstart' => $offset,
+			'limitnum' => $limit,
+		]);
+
+		$items = new ItemIterator($data['clients']['client']);
+		$items->setTotalResults($data['totalresults']);
+		$items->setOffset($data['startnumber'] ?? 0);
+		$items->setLimit($data['numreturned'] ?? 0);
+		return $items;
+	}
+
+
+	/**
 	 * @see https://developers.whmcs.com/api-reference/getclientsdomains/
 	 */
 	public function getClientsDomains(
