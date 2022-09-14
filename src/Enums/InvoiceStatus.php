@@ -7,12 +7,59 @@
 
 namespace JuniWalk\WHMCS\Enums;
 
-enum InvoiceStatus
+use JuniWalk\Utils\Enums\Color;
+use JuniWalk\Utils\Enums\LabelledEnum;
+
+enum InvoiceStatus: string implements LabelledEnum
 {
-	/** @var string */
-	case Draft;
-	case Paid;
-	case Unpaid;
-	case Cancelled;
-	case Overdue;
+	case Draft = 'draft';
+	case Paid = 'paid';
+	case Unpaid = 'unpaid';
+	case Cancelled = 'cancelled';
+	case Overdue = 'overdue';
+
+
+	/**
+	 * @return string[]
+	 */
+	public static function getItems(): iterable
+	{
+		$items = [];
+
+		foreach (self::cases() as $case) {
+			$items[$case->value] = $case->label();
+		}
+
+		return $items;
+	}
+
+
+	public function label(): string
+	{
+		return match($this) {
+			self::Draft => 'whmcs.enum.invoice-status.draft',
+			self::Paid => 'whmcs.enum.invoice-status.paid',
+			self::Unpaid => 'whmcs.enum.invoice-status.unpaid',
+			self::Cancelled => 'whmcs.enum.invoice-status.cancelled',
+			self::Overdue => 'whmcs.enum.invoice-status.overdue',
+		};
+	}
+
+
+	public function color(): Color
+	{
+		return match($this) {
+			self::Draft => Color::Secondary,
+			self::Paid => Color::Success,
+			self::Unpaid => Color::Danger,
+			self::Cancelled => Color::Secondary,
+			self::Overdue => Color::Warning,
+		};
+	}
+
+
+	public function icon(): ?string
+	{
+		return null;
+	}
 }

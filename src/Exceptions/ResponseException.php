@@ -7,14 +7,9 @@
 
 namespace JuniWalk\WHMCS\Exceptions;
 
-final class ResponseException extends AbstractException
+final class ResponseException extends WHMCSException
 {
-	/**
-	 * @param  string  $action
-	 * @param  string[]  $result
-	 * @return static
-	 */
-	public static function fromResult(string $action, iterable $result): self
+	public static function fromResult(string $action, iterable $result): static
 	{
 		return new static($action.': '.$result['message']);
 	}

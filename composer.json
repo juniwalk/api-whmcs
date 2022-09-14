@@ -12,10 +12,10 @@
 	},
 
 	"require": {
-		"php": ">=7.4",
+		"php": ">=8.1",
 		"guzzlehttp/guzzle": "^7.0",
-		"nette/schema": "^1.0",
-		"nette/utils": "^3.0"
+		"juniwalk/utils": "^1.0",
+		"nette/schema": "^1.0"
 	},
 
     "suggest": {

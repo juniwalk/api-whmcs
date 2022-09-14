@@ -9,10 +9,6 @@ namespace JuniWalk\WHMCS\Subsystems;
 
 trait LinkSubsystem
 {
-	/**
-	 * @param  int  $invoiceId
-	 * @return string
-	 */
 	public function createInvoiceLink(int $invoiceId): string
 	{
 		return $this->url.'/'.$this->adminDir.'/invoices.php?action=edit&id='.$invoiceId;

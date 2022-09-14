@@ -12,7 +12,6 @@ use JuniWalk\WHMCS\Tools\ItemIterator;
 trait SystemSubsystem
 {
 	/**
-	 * @return string[]
 	 * @see https://developers.whmcs.com/api-reference/getcurrencies/
 	 */
 	public function getCurrencies(): ItemIterator

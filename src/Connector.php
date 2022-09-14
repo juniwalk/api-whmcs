@@ -23,46 +23,17 @@ class Connector
 	use Subsystems\SystemSubsystem;
 	use Subsystems\UserSubsystem;
 
-	/** @var string */
-	private $url;
-
-	/** @var string */
-	private $adminDir;
-
-	/** @var string */
-	private $identifier;
-
-	/** @var string */
-	private $secret;
-
-	/** @var string */
-	private $accessKey;
-
-	/** @var Client */
-	private $http;
+	private Client $http;
 
 
-	/**
-	 * @param  string  $url
-	 * @param  string  $identifier
-	 * @param  string  $secret
-	 * @param  string  $adminDir
-	 * @param  string  $accessKey
-	 * @param  string[]  $params
-	 */
 	public function __construct(
-		string $url,
-		string $identifier,
-		string $secret,
-		string $adminDir,
-		string $accessKey = null,
+		private string $url,
+		private string $identifier,
+		private string $secret,
+		private string $adminDir,
+		private string $accessKey = null,
 		iterable $params = []
 	) {
-		$this->url = $url;
-		$this->identifier = $identifier;
-		$this->secret = $secret;
-		$this->adminDir = $adminDir;
-		$this->accessKey = $accessKey;
 		$this->http = new Client($params + [
 			'base_uri' => $url,
 			'timeout' => 6
@@ -71,9 +42,6 @@ class Connector
 
 
 	/**
-	 * @param  string  $action
-	 * @param  string[]  $params
-	 * @return string[]
 	 * @throws ClientException
 	 * @throws ResponseException
 	 */
@@ -108,9 +76,6 @@ class Connector
 
 
 	/**
-	 * @param  string[]  $params
-	 * @param  Expect[]  $schema
-	 * @return string[]
 	 * @throws ValidationException
 	 */
 	protected function check(iterable $params, iterable $schema): iterable

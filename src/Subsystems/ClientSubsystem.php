@@ -7,7 +7,8 @@
 
 namespace JuniWalk\WHMCS\Subsystems;
 
-// use JuniWalk\WHMCS\Enums\Sort;
+use JuniWalk\WHMCS\Enums\ClientStatus;
+use JuniWalk\WHMCS\Enums\Sort;
 use JuniWalk\WHMCS\Tools\ItemIterator;
 use Nette\Schema\Expect;
 
@@ -18,17 +19,17 @@ trait ClientSubsystem
 	 */
 	public function getClients(
 		string $search = null,
-		string $status = null,		// Active, Inactive, Closed
+		ClientStatus $status = null,
 		string $orderBy = null,
-		string $sort = 'ASC',
+		Sort $sort = Sort::ASC,
 		int $offset = 0,
 		int $limit = 25
 	): ItemIterator {
 		$data = $this->call('GetClients', [
 			'search' => $search,
-			'status' => $status,
+			'status' => $status->name,
 			'orderby' => $orderBy,
-			'sorting' => $sort,
+			'sorting' => $sort->name,
 			'limitstart' => $offset,
 			'limitnum' => $limit,
 		]);

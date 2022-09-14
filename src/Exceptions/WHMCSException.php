@@ -9,6 +9,6 @@ namespace JuniWalk\WHMCS\Exceptions;
 
 use RuntimeException;
 
-abstract class AbstractException extends RuntimeException
+abstract class WHMCSException extends RuntimeException
 {
 }

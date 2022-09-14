@@ -14,9 +14,6 @@ use Nette\Schema\Schema;
 
 final class WhmcsExtension extends CompilerExtension
 {
-	/**
-	 * @return Schema
-	 */
 	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
@@ -32,9 +29,6 @@ final class WhmcsExtension extends CompilerExtension
 	}
 
 
-	/**
-	 * @return void
-	 */
 	public function loadConfiguration()
 	{
 		$builder = $this->getContainerBuilder();

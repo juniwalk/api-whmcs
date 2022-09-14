@@ -9,7 +9,6 @@ namespace JuniWalk\WHMCS\Enums;
 
 enum Sort
 {
-	/** @var string */
 	case ASC;
 	case DESC;
 }

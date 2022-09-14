@@ -12,10 +12,6 @@ use JuniWalk\WHMCS\Tools\ItemIterator;
 trait OrderSubsystem
 {
 	/**
-	 * @param  string $productId
-	 * @param  string|null  $module
-	 * @param  int|null  $groupId
-	 * @return string[]
 	 * @see https://developers.whmcs.com/api-reference/getproducts/
 	 */
 	public function getProducts(

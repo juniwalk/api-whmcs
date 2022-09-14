@@ -7,17 +7,14 @@
 
 namespace JuniWalk\WHMCS\Subsystems;
 
-// use JuniWalk\WHMCS\Enums\InvoiceStatus;
-// use JuniWalk\WHMCS\Enums\Sort;
+use JuniWalk\WHMCS\Enums\InvoiceStatus;
+use JuniWalk\WHMCS\Enums\Sort;
 use JuniWalk\WHMCS\Tools\ItemIterator;
 use Nette\Schema\Expect;
 
 trait BillingSubsystem
 {
 	/**
-	 * @param  int $paymentMethod
-	 * @param  mixed[]  $params
-	 * @return bool
 	 * @see https://developers.whmcs.com/api-reference/addtransaction/
 	 */
 	public function addTransaction(string $paymentMethod, iterable $params): bool
@@ -45,10 +42,6 @@ trait BillingSubsystem
 
 
 	/**
-	 * @param  int|null  $invoiceId
-	 * @param  int|null  $clientId
-	 * @param  string|null  $transactionId
-	 * @return string[]
 	 * @see https://developers.whmcs.com/api-reference/gettransactions/
 	 */
 	public function getTransactions(
@@ -71,8 +64,6 @@ trait BillingSubsystem
 
 
 	/**
-	 * @param  int  $invoiceId
-	 * @return string[]
 	 * @see https://developers.whmcs.com/api-reference/getinvoice/
 	 */
 	public function getInvoice(int $invoiceId): iterable {
@@ -83,18 +74,13 @@ trait BillingSubsystem
 
 
 	/**
-	 * @param  string|null  $search
-	 * @param  string  $sort
-	 * @param  int  $offset
-	 * @param  int  $limit
-	 * @return string[]
 	 * @see https://developers.whmcs.com/api-reference/getinvoices/
 	 */
 	public function getInvoices(
 		int $userId = null,
-		string $status = null,
+		InvoiceStatus $status = null,
 		string $orderBy = null,
-		string $sort = 'ASC',
+		Sort $sort = Sort::ASC,
 		int $offset = 0,
 		int $limit = 25
 	): ItemIterator {
@@ -102,9 +88,9 @@ trait BillingSubsystem
 			'limitstart' => $offset,
 			'limitnum' => $limit,
 			'userid' => $userId,
-			'status' => $status,			// Draft, Paid, Unpaid, Cancelled, Overdue
+			'status' => $status->name,
 			'orderby' => $orderBy,
-			'order' => $sort,
+			'order' => $sort->name,
 		]);
 
 		$items = new ItemIterator($data['invoices']['invoice']);

@@ -7,7 +7,7 @@
 
 namespace JuniWalk\WHMCS\Subsystems;
 
-// use JuniWalk\WHMCS\Enums\Sort;
+use JuniWalk\WHMCS\Enums\Sort;
 use JuniWalk\WHMCS\Tools\ItemIterator;
 
 trait UserSubsystem
@@ -22,14 +22,14 @@ trait UserSubsystem
 	 */
 	public function getUsers(
 		string $search = null,
-		string $sort = 'ASC',
+		Sort $sort = Sort::ASC,
 		int $offset = 0,
 		int $limit = 25
 	): ItemIterator {
 		$data = $this->call('GetUsers', [
 			'limitstart' => $offset,
 			'limitnum' => $limit,
-			'sorting' => $sort,
+			'sorting' => $sort->name,
 			'search' => $search,
 		]);
 
