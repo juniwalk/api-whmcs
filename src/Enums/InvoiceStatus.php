@@ -8,30 +8,18 @@
 namespace JuniWalk\WHMCS\Enums;
 
 use JuniWalk\Utils\Enums\Color;
-use JuniWalk\Utils\Enums\LabelledEnum;
+use JuniWalk\Utils\Enums\LabeledEnum;
+use JuniWalk\Utils\Enums\LabeledTrait;
 
-enum InvoiceStatus: string implements LabelledEnum
+enum InvoiceStatus: string implements LabeledEnum
 {
+	use LabeledTrait;
+
 	case Draft = 'draft';
 	case Paid = 'paid';
 	case Unpaid = 'unpaid';
 	case Cancelled = 'cancelled';
 	case Overdue = 'overdue';
-
-
-	/**
-	 * @return string[]
-	 */
-	public static function getItems(): iterable
-	{
-		$items = [];
-
-		foreach (self::cases() as $case) {
-			$items[$case->value] = $case->label();
-		}
-
-		return $items;
-	}
 
 
 	public function label(): string
@@ -55,11 +43,5 @@ enum InvoiceStatus: string implements LabelledEnum
 			self::Cancelled => Color::Secondary,
 			self::Overdue => Color::Warning,
 		};
-	}
-
-
-	public function icon(): ?string
-	{
-		return null;
 	}
 }

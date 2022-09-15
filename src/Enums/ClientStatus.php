@@ -8,28 +8,16 @@
 namespace JuniWalk\WHMCS\Enums;
 
 use JuniWalk\Utils\Enums\Color;
-use JuniWalk\Utils\Enums\LabelledEnum;
+use JuniWalk\Utils\Enums\LabeledEnum;
+use JuniWalk\Utils\Enums\LabeledTrait;
 
-enum ClientStatus: string implements LabelledEnum
+enum ClientStatus: string implements LabeledEnum
 {
+	use LabeledTrait;
+
     case Active = 'active';
 	case Inactive = 'inactive';
 	case Closed = 'closed';
-
-
-	/**
-	 * @return string[]
-	 */
-	public static function getItems(): iterable
-	{
-		$items = [];
-
-		foreach (self::cases() as $case) {
-			$items[$case->value] = $case->label();
-		}
-
-		return $items;
-	}
 
 
 	public function label(): string
@@ -49,11 +37,5 @@ enum ClientStatus: string implements LabelledEnum
 			self::Inactive => Color::Secondary,
 			self::Closed => Color::Danger,
 		};
-	}
-
-
-	public function icon(): ?string
-	{
-		return null;
 	}
 }
