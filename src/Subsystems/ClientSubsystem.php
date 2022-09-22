@@ -68,4 +68,34 @@ trait ClientSubsystem
 		$items->setLimit($data['numreturned']);
 		return $items;
 	}
+
+
+	/**
+	 * @see https://developers.whmcs.com/api-reference/getclientsproducts/
+	 */
+	public function getClientsProducts(
+		iterable $params,
+		int $offset = 0,
+		int $limit = 25
+	): ItemIterator
+	{
+		$params = $this->check($params, [
+			'clientid'	=> Expect::int()->nullable(),
+			'serviceid'	=> Expect::int()->nullable(),
+			'pid'		=> Expect::int()->nullable(),
+			'domain'	=> Expect::string()->nullable(),
+			'username2'	=> Expect::string()->nullable(),
+		]);
+
+		$data = $this->call('GetClientsProducts', $params + [
+			'limitstart' => $offset,
+			'limitnum' => $limit,
+		]);
+
+		$items = new ItemIterator($data['products']['product']);
+		$items->setTotalResults($data['totalresults']);
+		$items->setOffset($data['startnumber']);
+		$items->setLimit($data['numreturned']);
+		return $items;
+	}
 }
