@@ -25,7 +25,7 @@ trait OrderSubsystem
 			'module' => $module,
 		]);
 
-		$items = new ItemIterator($data['products']['product']);
+		$items = new ItemIterator($data['products']['product'] ?? []);
 		$items->setTotalResults($data['totalresults']);
 		$items->setOffset($data['startnumber'] ?? 0);
 		$items->setLimit($data['numreturned'] ?? 0);

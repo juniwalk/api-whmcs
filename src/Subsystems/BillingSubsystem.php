@@ -55,7 +55,7 @@ trait BillingSubsystem
 			'transid' => $transactionId,
 		]);
 
-		$items = new ItemIterator($data['transactions']['transaction']);
+		$items = new ItemIterator($data['transactions']['transaction'] ?? []);
 		$items->setTotalResults($data['totalresults']);
 		$items->setOffset($data['startnumber']);
 		$items->setLimit($data['numreturned']);
@@ -93,7 +93,7 @@ trait BillingSubsystem
 			'order' => $sort->name,
 		]);
 
-		$items = new ItemIterator($data['invoices']['invoice']);
+		$items = new ItemIterator($data['invoices']['invoice'] ?? []);
 		$items->setTotalResults($data['totalresults']);
 		$items->setOffset($data['startnumber']);
 		$items->setLimit($data['numreturned']);

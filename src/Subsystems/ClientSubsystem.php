@@ -34,7 +34,7 @@ trait ClientSubsystem
 			'limitnum' => $limit,
 		]);
 
-		$items = new ItemIterator($data['clients']['client']);
+		$items = new ItemIterator($data['clients']['client'] ?? []);
 		$items->setTotalResults($data['totalresults']);
 		$items->setOffset($data['startnumber'] ?? 0);
 		$items->setLimit($data['numreturned'] ?? 0);
@@ -62,7 +62,7 @@ trait ClientSubsystem
 			'limitnum' => $limit,
 		]);
 
-		$items = new ItemIterator($data['domains']['domain']);
+		$items = new ItemIterator($data['domains']['domain'] ?? []);
 		$items->setTotalResults($data['totalresults']);
 		$items->setOffset($data['startnumber']);
 		$items->setLimit($data['numreturned']);
@@ -92,7 +92,7 @@ trait ClientSubsystem
 			'limitnum' => $limit,
 		]);
 
-		$items = new ItemIterator($data['products']['product']);
+		$items = new ItemIterator($data['products']['product'] ?? []);
 		$items->setTotalResults($data['totalresults']);
 		$items->setOffset($data['startnumber']);
 		$items->setLimit($data['numreturned']);
