@@ -9,11 +9,11 @@ namespace JuniWalk\WHMCS\Enums;
 
 use JuniWalk\Utils\Enums\Color;
 use JuniWalk\Utils\Enums\LabeledEnum;
-use JuniWalk\Utils\Enums\LabeledTrait;
+use JuniWalk\Utils\Enums\Traits\Labeled;
 
 enum InvoiceStatus: string implements LabeledEnum
 {
-	use LabeledTrait;
+	use Labeled;
 
 	case Draft = 'draft';
 	case Paid = 'paid';
