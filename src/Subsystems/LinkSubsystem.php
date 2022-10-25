@@ -15,6 +15,12 @@ trait LinkSubsystem
 	}
 
 
+	public function createServiceLink(int $serviceId): string
+	{
+		return $this->url.'/'.$this->adminDir.'/clientsservices.php?productselect='.$serviceId;
+	}
+
+
 	public function createInvoiceLink(int $invoiceId): string
 	{
 		return $this->url.'/'.$this->adminDir.'/invoices.php?action=edit&id='.$invoiceId;

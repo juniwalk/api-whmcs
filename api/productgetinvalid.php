@@ -38,6 +38,7 @@ try {
 SELECT
 	c.id AS clientId,
 	p.id AS productId,
+	h.id AS serviceId,
 	h.domain,
 	h.domainstatus AS `status`,
 	p.`name` AS productName,
@@ -81,6 +82,7 @@ Monthly	2022-11-25	2022-11-25 - po zaplacení
 		->select(
 			'c.id AS clientId',
 			'p.id AS productId',
+			'h.id AS serviceId',
 			'h.domain AS domain',
 			'h.domainstatus AS status',
 			'p.name AS productName',
