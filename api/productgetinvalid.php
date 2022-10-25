@@ -89,18 +89,18 @@ Monthly	2022-11-25	2022-11-25 - po zaplacení
 			'h.nextduedate',
 			'h.nextinvoicedate',
 		)
-		->selectRaw('DATEDIFF(h.nextduedate, h.nextinvoicedate) AS diff')
+		->selectRaw('DATEDIFF(h.nextinvoicedate, h.nextduedate) AS diff')
 		->whereRaw("
-			h.domainstatus NOT IN ( 'active', 'cancelled' ) 
+			h.domainstatus NOT IN ('active', 'cancelled') 
 			OR (
-				DATEDIFF( h.nextinvoicedate, h.nextduedate ) <> 30 
-				AND DATEDIFF( h.nextinvoicedate, h.nextduedate ) != 0 
+				DATEDIFF(h.nextinvoicedate, h.nextduedate) <> 30 
+				AND DATEDIFF(h.nextinvoicedate, h.nextduedate) != 0 
 				AND h.billingcycle = 'Monthly' 
 				AND h.domainstatus = 'active' 
 			) 
 			OR (
-				DATEDIFF( h.nextinvoicedate, h.nextduedate ) <> 365 
-				AND DATEDIFF( h.nextinvoicedate, h.nextduedate ) != 0 
+				DATEDIFF(h.nextinvoicedate, h.nextduedate) <> 365 
+				AND DATEDIFF(h.nextinvoicedate, h.nextduedate) != 0 
 				AND h.billingcycle = 'Annually' 
 				AND h.domainstatus = 'active' 
 			)  
