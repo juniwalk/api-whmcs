@@ -93,7 +93,7 @@ Monthly	2022-11-25	2022-11-25 - po zaplacení
 		->whereRaw("
 			h.domainstatus NOT IN ('active', 'cancelled') 
 			OR (
-				DATEDIFF(h.nextinvoicedate, h.nextduedate) <> 30 
+				DATEDIFF(h.nextinvoicedate, h.nextduedate) > 61 
 				AND DATEDIFF(h.nextinvoicedate, h.nextduedate) != 0 
 				AND h.billingcycle = 'Monthly' 
 				AND h.domainstatus = 'active' 
