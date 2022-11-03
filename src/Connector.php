@@ -8,6 +8,7 @@
 namespace JuniWalk\WHMCS;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use JuniWalk\WHMCS\Exceptions\ResponseException;
 use Nette\Schema\Expect;
 use Nette\Schema\Processor;
@@ -43,7 +44,7 @@ class Connector
 
 
 	/**
-	 * @throws ClientException
+	 * @throws RequestException
 	 * @throws ResponseException
 	 */
 	public function call(string $action, iterable $params = []): iterable
@@ -61,8 +62,8 @@ class Connector
 				'form_params' => $params,
 			]);
 
-		} catch (ClientException $e) {
-			throw $e;
+		} catch (GuzzleException $e) {
+			throw RequestException::fromAction($action, $e);
 		}
 
 		$result = $response->getBody()->getContents();
