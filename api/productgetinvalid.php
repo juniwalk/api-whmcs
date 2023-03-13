@@ -46,7 +46,7 @@ SELECT
 	h.nextduedate,
 	h.nextinvoicedate,
 	h.billingcycle,
-	DATEDIFF( h.nextinvoicedate, h.nextduedate ) AS diff
+	DATEDIFF( NOW(), h.nextduedate ) AS diff
 FROM
 	tblhosting AS h
 	INNER JOIN tblclients AS c ON h.userid = c.id
@@ -54,20 +54,19 @@ FROM
 WHERE
 	h.domainstatus NOT IN ( 'active', 'cancelled' ) 
 	OR (
-		DATEDIFF( h.nextinvoicedate, h.nextduedate ) <> 30 
+		DATEDIFF( NOW(), h.nextduedate ) > 45 
 		AND DATEDIFF( h.nextinvoicedate, h.nextduedate ) != 0 
 		AND h.billingcycle = 'Monthly' 
 		AND h.domainstatus = 'active' 
 	) 
 	OR (
-		DATEDIFF( h.nextinvoicedate, h.nextduedate ) <> 365 
+		DATEDIFF( NOW(), h.nextduedate ) > 45 
 		AND DATEDIFF( h.nextinvoicedate, h.nextduedate ) != 0 
 		AND h.billingcycle = 'Annually' 
 		AND h.domainstatus = 'active' 
 	) 
 ORDER BY
 	h.nextinvoicedate ASC;
-
 
 - služba měsíční 
 		nextduedate	nextinvoicedate
@@ -89,17 +88,17 @@ Monthly	2022-11-25	2022-11-25 - po zaplacení
 			'h.nextduedate',
 			'h.nextinvoicedate',
 		)
-		->selectRaw('DATEDIFF(h.nextinvoicedate, h.nextduedate) AS diff')
+		->selectRaw('DATEDIFF(NOW(), h.nextduedate) AS diff')
 		->whereRaw("
 			h.domainstatus NOT IN ('active', 'cancelled') 
 			OR (
-				DATEDIFF(h.nextinvoicedate, h.nextduedate) > 61 
+				DATEDIFF(NOW(), h.nextduedate) > 45 
 				AND DATEDIFF(h.nextinvoicedate, h.nextduedate) != 0 
 				AND h.billingcycle = 'Monthly' 
 				AND h.domainstatus = 'active' 
 			) 
 			OR (
-				DATEDIFF(h.nextinvoicedate, h.nextduedate) <> 365 
+				DATEDIFF(NOW(), h.nextduedate) > 45 
 				AND DATEDIFF(h.nextinvoicedate, h.nextduedate) != 0 
 				AND h.billingcycle = 'Annually' 
 				AND h.domainstatus = 'active' 
