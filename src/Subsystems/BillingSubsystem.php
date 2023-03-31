@@ -26,7 +26,7 @@ trait BillingSubsystem
 			'clientid'				=> Expect::int()->required(),
 			'description'			=> Expect::string()->required(),
 			'amount'				=> Expect::float()->required(),
-			'unit'					=> Expect::string()->required()->default('quantity'),
+			'unit'					=> Expect::string()->default('quantity'),
 			'quantity'				=> Expect::float()->default(1),
 			'invoiceaction'			=> Expect::string()->default('duedate'),
 			'recur'					=> Expect::int(),
