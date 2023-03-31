@@ -8,6 +8,7 @@
 namespace JuniWalk\WHMCS\Subsystems;
 
 use JuniWalk\WHMCS\Tools\ItemIterator;
+use Nette\Schema\Expect;
 
 trait OrderSubsystem
 {
