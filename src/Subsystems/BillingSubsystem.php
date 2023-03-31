@@ -17,16 +17,17 @@ trait BillingSubsystem
 	/**
 	 * @see https://developers.whmcs.com/api-reference/addbillableitem/
 	 */
-	public function addBillableItem(int $clientId, string $description, float $amount, iterable $params): bool
+	public function addBillableItem(int $clientId, string $description, float $amount, iterable $params): array
 	{
 		$params['clientid'] = $clientId;
 		$params['description'] = $description;
 		$params['amount'] = $amount;
+		$params['unit'] ??= 'quantity';
 		$params = $this->check($params, [
 			'clientid'				=> Expect::int()->required(),
 			'description'			=> Expect::string()->required(),
 			'amount'				=> Expect::float()->required(),
-			'unit'					=> Expect::string()->default('quantity'),
+			'unit'					=> Expect::string()->required(),
 			'quantity'				=> Expect::float()->default(1),
 			'invoiceaction'			=> Expect::string()->default('duedate'),
 			'recur'					=> Expect::int(),
@@ -39,8 +40,7 @@ trait BillingSubsystem
 		// 	$schema['duedate']->required();
 		// }
 
-		$response = $this->call('AddBillableItem', $params);
-		return $response['result'] === 'success';
+		return $this->call('AddBillableItem', $params);
 	}
 
 
