@@ -35,9 +35,9 @@ trait BillingSubsystem
 			'duedate'				=> Expect::string(),
 		]);
 
-		if ($params['invoiceaction'] == 'duedate') {
-			$params['duedate']->required();
-		}
+		// if ($params['invoiceaction'] == 'duedate') {
+		// 	$schema['duedate']->required();
+		// }
 
 		$response = $this->call('AddBillableItem', $params);
 		return $response['result'] === 'success';
