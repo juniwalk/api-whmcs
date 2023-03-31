@@ -15,6 +15,36 @@ use Nette\Schema\Expect;
 trait BillingSubsystem
 {
 	/**
+	 * @see https://developers.whmcs.com/api-reference/addbillableitem/
+	 */
+	public function addTransaction(int $clientId, string $description, float $amount, iterable $params): bool
+	{
+		$params['clientid'] = $clientId;
+		$params['description'] = $description;
+		$params['amount'] = $amount;
+		$params = $this->check($params, [
+			'clientid'				=> Expect::int()->required(),
+			'description'			=> Expect::string()->required(),
+			'amount'				=> Expect::float()->required(),
+			'unit'					=> Expect::string()->required()->default('quantity'),
+			'quantity'				=> Expect::float()->default(1),
+			'invoiceaction'			=> Expect::string()->default('duedate'),
+			'recur'					=> Expect::int(),
+			'recurcycle'			=> Expect::string(),
+			'recurfor'				=> Expect::int(),
+			'duedate'				=> Expect::string(),
+		]);
+
+		if ($params['invoiceaction'] == 'duedate') {
+			$params['duedate']->required();
+		}
+
+		$response = $this->call('AddBillableItem', $params);
+		return $response['result'] === 'success';
+	}
+
+
+	/**
 	 * @see https://developers.whmcs.com/api-reference/addtransaction/
 	 */
 	public function addTransaction(string $paymentMethod, iterable $params): bool
