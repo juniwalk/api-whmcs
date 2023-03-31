@@ -17,7 +17,7 @@ trait BillingSubsystem
 	/**
 	 * @see https://developers.whmcs.com/api-reference/addbillableitem/
 	 */
-	public function addTransaction(int $clientId, string $description, float $amount, iterable $params): bool
+	public function addBillableItem(int $clientId, string $description, float $amount, iterable $params): bool
 	{
 		$params['clientid'] = $clientId;
 		$params['description'] = $description;
