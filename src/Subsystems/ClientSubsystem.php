@@ -43,6 +43,20 @@ trait ClientSubsystem
 
 
 	/**
+	 * @see https://developers.whmcs.com/api-reference/getclientsdetails/
+	 * @deprecated
+	 */
+	public function getClientsDetails(?int $clientId, ?string $email, bool $stats = false): array
+	{
+		return $this->call('GetClientsDetails', [
+			'clientid' => $clientId,
+			'email' => $email,
+			'stats' => $stats,
+		]);
+	}
+
+
+	/**
 	 * @see https://developers.whmcs.com/api-reference/getclientsdomains/
 	 */
 	public function getClientsDomains(
