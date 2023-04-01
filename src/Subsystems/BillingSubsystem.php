@@ -97,9 +97,6 @@ trait BillingSubsystem
 	public function createInvoice(int $userId, iterable $params): array
 	{
 		$params['userid'] = $userId;
-		$params['description'] = $description;
-		$params['amount'] = $amount;
-		$params['unit'] ??= 'quantity';
 		$params = $this->check($params, [
 			'clientid'				=> Expect::int()->required(),
 			'status'				=> Expect::string(),
