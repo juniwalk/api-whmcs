@@ -112,11 +112,11 @@ trait BillingSubsystem
 			'duedate'				=> Expect::string(),
 			'notes'					=> Expect::string(),
 			'autoapplycredit'		=> Expect::bool(),
-			'item'					=> Expect::structure([
+			'item'					=> Expect::listOf(Expect::structure([
 				'description'		=> Expect::string(),
 				'amount'			=> Expect::float(),
 				'taxed'				=> Expect::bool(),
-			]),
+			])),
 		]);
 
 		foreach ($params['item'] ?? [] as $index => $item) {
