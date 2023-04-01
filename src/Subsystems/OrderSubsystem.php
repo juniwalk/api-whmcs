@@ -48,6 +48,7 @@ trait OrderSubsystem
 			'billingcycle'			=> Expect::arrayOf('string'),
 			'customfields'			=> Expect::arrayOf('string'),
 			'priceoverride'			=> Expect::arrayOf('float'),
+			'noemail'				=> Expect::bool(),
 		]);
 
 		return $this->call('AddOrder', $params);
