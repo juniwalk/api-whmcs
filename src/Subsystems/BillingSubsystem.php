@@ -125,7 +125,7 @@ trait BillingSubsystem
 			}
 		}
 
-		unset($params['item'];)
+		unset($params['item']);
 
 		return $this->call('CreateInvoice', $params);
 	}
