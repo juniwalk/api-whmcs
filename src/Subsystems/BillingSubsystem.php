@@ -91,6 +91,44 @@ trait BillingSubsystem
 		$items->setLimit($data['numreturned']);
 		return $items;
 	}
+	/**
+	 * @see https://developers.whmcs.com/api-reference/createinvoice/
+	 */
+	public function createInvoice(int $userId, iterable $params): array
+	{
+		$params['userid'] = $userId;
+		$params['description'] = $description;
+		$params['amount'] = $amount;
+		$params['unit'] ??= 'quantity';
+		$params = $this->check($params, [
+			'clientid'				=> Expect::int()->required(),
+			'status'				=> Expect::string(),
+			'draft'					=> Expect::bool(),
+			'sendinvoice'			=> Expect::bool(),
+			'paymentmethod'			=> Expect::string(),
+			'taxrate'				=> Expect::float(),
+			'taxrate2'				=> Expect::float(),
+			'date'					=> Expect::string(),
+			'duedate'				=> Expect::string(),
+			'notes'					=> Expect::string(),
+			'autoapplycredit'		=> Expect::bool(),
+			'item'					=> Expect::structure([
+				'description'		=> Expect::string(),
+				'amount'			=> Expect::float(),
+				'taxed'				=> Expect::bool(),
+			]),
+		]);
+
+		foreach ($params['item'] ?? [] as $index => $item) {
+			foreach ($item as $key => $value) {
+				$params['item'.$key.$index] = $value;
+			}
+		}
+
+		unset($params['item'];)
+
+		return $this->call('CreateInvoice', $params);
+	}
 
 
 	/**
