@@ -98,7 +98,7 @@ trait BillingSubsystem
 	{
 		$params['userid'] = $userId;
 		$params = $this->check($params, [
-			'clientid'				=> Expect::int()->required(),
+			'userid'				=> Expect::int()->required(),
 			'status'				=> Expect::string(),
 			'draft'					=> Expect::bool(),
 			'sendinvoice'			=> Expect::bool(),
