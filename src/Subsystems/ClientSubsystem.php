@@ -7,9 +7,11 @@
 
 namespace JuniWalk\WHMCS\Subsystems;
 
+use JuniWalk\WHMCS\Entity\Client;
 use JuniWalk\WHMCS\Enums\ClientStatus;
 use JuniWalk\WHMCS\Enums\Sort;
 use JuniWalk\WHMCS\Tools\ItemIterator;
+use JuniWalk\Utils\Arrays;
 use Nette\Schema\Expect;
 
 trait ClientSubsystem
@@ -23,9 +25,9 @@ trait ClientSubsystem
 		string $orderBy = null,
 		Sort $sort = Sort::ASC,
 		int $offset = 0,
-		int $limit = 25
+		int $limit = 25,
 	): ItemIterator {
-		$data = $this->call('GetClients', [
+		$result = $this->call('GetClients', [
 			'search' => $search,
 			'status' => $status?->name,
 			'orderby' => $orderBy,
@@ -34,10 +36,16 @@ trait ClientSubsystem
 			'limitnum' => $limit,
 		]);
 
-		$items = new ItemIterator($data['clients']['client'] ?? []);
-		$items->setTotalResults($data['totalresults']);
-		$items->setOffset($data['startnumber'] ?? 0);
-		$items->setLimit($data['numreturned'] ?? 0);
+		$clients = Arrays::map(
+			items: $result['clients']['client'] ?? [],
+			callback: fn($client) => Client::fromResult($client),
+			isRecursive: false,
+		);
+
+		$items = new ItemIterator($clients);
+		$items->setTotalResults($result['totalresults']);
+		$items->setOffset($result['startnumber'] ?? 0);
+		$items->setLimit($result['numreturned'] ?? 0);
 		return $items;
 	}
 
@@ -46,13 +54,18 @@ trait ClientSubsystem
 	 * @see https://developers.whmcs.com/api-reference/getclientsdetails/
 	 * @deprecated
 	 */
-	public function getClientsDetails(?int $clientId = null, ?string $email = null, bool $stats = false): array
-	{
-		return $this->call('GetClientsDetails', [
+	public function getClientsDetails(
+		?int $clientId = null,
+		?string $email = null,
+		bool $stats = false,
+	): Client {
+		$result = $this->call('GetClientsDetails', [
 			'clientid' => $clientId,
 			'email' => $email,
 			'stats' => $stats,
 		]);
+
+		return Client::fromResult($result);
 	}
 
 
@@ -62,9 +75,8 @@ trait ClientSubsystem
 	public function getClientsDomains(
 		iterable $params,
 		int $offset = 0,
-		int $limit = 25
-	): ItemIterator
-	{
+		int $limit = 25,
+	): ItemIterator {
 		$params = $this->check($params, [
 			'clientid'	=> Expect::int()->nullable(),
 			'domainid'	=> Expect::int()->nullable(),
@@ -90,9 +102,8 @@ trait ClientSubsystem
 	public function getClientsProducts(
 		iterable $params,
 		int $offset = 0,
-		int $limit = 25
-	): ItemIterator
-	{
+		int $limit = 25,
+	): ItemIterator {
 		$params = $this->check($params, [
 			'clientid'	=> Expect::int()->nullable(),
 			'serviceid'	=> Expect::int()->nullable(),
