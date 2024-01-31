@@ -22,6 +22,7 @@ class Connector
 	use Subsystems\DomainSubsystem;
 	use Subsystems\LinkSubsystem;
 	use Subsystems\OrderSubsystem;
+	use Subsystems\ProductSubSystem;
 	use Subsystems\SystemSubsystem;
 	use Subsystems\UserSubsystem;
 
