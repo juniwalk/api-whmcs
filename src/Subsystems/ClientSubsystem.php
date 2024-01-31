@@ -125,7 +125,7 @@ trait ClientSubsystem
 		);
 
 		$items = new ItemIterator($products);
-		$items->setTotalResults($data['totalresults']);
+		$items->setTotalResults($result['totalresults']);
 		$items->setOffset($result['startnumber']);
 		$items->setLimit($result['numreturned']);
 		return $items;
