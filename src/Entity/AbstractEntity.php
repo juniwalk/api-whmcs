@@ -42,7 +42,7 @@ abstract class AbstractEntity
 	private function hydrate(array $values): array
 	{
 		foreach ($values as $key => $value) {
-			if (!property_exists($self, $key)) {
+			if (!property_exists($this, $key)) {
 				continue;
 			}
 
