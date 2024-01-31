@@ -11,34 +11,15 @@ use JuniWalk\ORM\Interfaces\HtmlOption;
 use JuniWalk\ORM\Traits as Tools;
 use JuniWalk\Utils\Html;
 
-class Client implements HtmlOption
+class Client extends AbstractEntity implements HtmlOption
 {
 	use Tools\Identifier;
 
-	private ?string $firstname;
-	private ?string $lastname;
-	private ?string $fullname;
-	private ?string $companyname;
-	private ?string $email;
-	private ?string $phonenumber;
-
-	public static function fromResult(array $result): self
-	{
-		$self = new static;
-
-		foreach ($result as $key => $value) {
-			if (!property_exists($self, $key)) {
-				continue;
-			}
-
-			$self->$key = $value ?: null;
-		}
-
-		$self->fullname ??= $self->firstname.' '.$self->lastname;
-		$self->companyname ??= $self->fullname;
-
-		return $self;
-	}
+	protected ?string $firstname;
+	protected ?string $lastname;
+	protected ?string $companyname;
+	protected ?string $email;
+	protected ?string $phonenumber;
 
 
 	public function getFirstName(): ?string
@@ -55,7 +36,7 @@ class Client implements HtmlOption
 
 	public function getFullName(): ?string
 	{
-		return $this->fullname;
+		return $this->firstname.' '.$this->lastname;
 	}
 
 
@@ -80,7 +61,7 @@ class Client implements HtmlOption
 	public function createOption(): Html
 	{
 		$params = [
-			'%companyName%' => $this->companyname,
+			'%companyName%' => $this->companyname ?? $this->fullname,
 			'%fullName%' => $this->fullname,
 			'%email%' => $this->email,
 			'%id%' => $this->id,

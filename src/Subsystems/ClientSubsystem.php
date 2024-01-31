@@ -8,6 +8,7 @@
 namespace JuniWalk\WHMCS\Subsystems;
 
 use JuniWalk\WHMCS\Entity\Client;
+use JuniWalk\WHMCS\Entity\Product;
 use JuniWalk\WHMCS\Enums\ClientStatus;
 use JuniWalk\WHMCS\Enums\Sort;
 use JuniWalk\WHMCS\Tools\ItemIterator;
@@ -112,15 +113,21 @@ trait ClientSubsystem
 			'username2'	=> Expect::string()->nullable(),
 		]);
 
-		$data = $this->call('GetClientsProducts', $params + [
+		$result = $this->call('GetClientsProducts', $params + [
 			'limitstart' => $offset,
 			'limitnum' => $limit,
 		]);
 
-		$items = new ItemIterator($data['products']['product'] ?? []);
+		$products = Arrays::map(
+			items: $result['products']['product'] ?? [],
+			callback: fn($product) => Product::fromResult($product),
+			isRecursive: false,
+		);
+
+		$items = new ItemIterator($products);
 		$items->setTotalResults($data['totalresults']);
-		$items->setOffset($data['startnumber']);
-		$items->setLimit($data['numreturned']);
+		$items->setOffset($result['startnumber']);
+		$items->setLimit($result['numreturned']);
 		return $items;
 	}
 }

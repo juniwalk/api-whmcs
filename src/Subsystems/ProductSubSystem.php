@@ -7,6 +7,7 @@
 
 namespace JuniWalk\WHMCS\Subsystems;
 
+use JuniWalk\WHMCS\Entity\Product;
 use Nette\Schema\Expect;
 
 trait ProductSubSystem
@@ -14,9 +15,9 @@ trait ProductSubSystem
 	/**
 	 * @see https://developers.whmcs.com/api-reference/updateclientproduct/
 	 */
-	public function updateClientProduct(int $serviceId, iterable $params): bool
+	public function updateClientProduct(Product $product): bool
 	{
-		$params['serviceid'] = $domainId;
+		$params = $product->changes();
 		$params = $this->check($params, [
 			'serviceid'				=> Expect::int()->required(),
 			'pid'					=> Expect::int(),
