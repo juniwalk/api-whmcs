@@ -21,6 +21,12 @@ abstract class AbstractEntity
 	}
 
 
+	public function __clone()
+	{
+		// throw new MethodNotAllowedException;
+	}
+
+
 	public static function fromResult(array $result): self
 	{
 		return new static($result);

@@ -8,8 +8,8 @@
 namespace JuniWalk\WHMCS\Entity;
 
 use JuniWalk\ORM\Interfaces\HtmlOption;
-use JuniWalk\ORM\Traits as Tools;
 use JuniWalk\Utils\Html;
+use JuniWalk\WHMCS\Traits as Tools;
 
 class Client extends AbstractEntity implements HtmlOption
 {

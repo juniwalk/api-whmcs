@@ -7,7 +7,7 @@
 
 namespace JuniWalk\WHMCS\Entity;
 
-use JuniWalk\ORM\Traits as Tools;
+use JuniWalk\WHMCS\Traits as Tools;
 
 class Product extends AbstractEntity
 {
