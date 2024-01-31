@@ -35,7 +35,7 @@ abstract class AbstractEntity
 
 	public function changes(): array
 	{
-		return array_diff_assoc($this->__snapshot, $this->snapshot());
+		return array_diff_assoc($this->snapshot(), $this->__snapshot);
 	}
 
 
