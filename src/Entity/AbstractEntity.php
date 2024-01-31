@@ -7,6 +7,8 @@
 
 namespace JuniWalk\WHMCS\Entity;
 
+use BadMethodCallException;
+
 abstract class AbstractEntity
 {
 	protected const SnapshotExclude = [
@@ -15,15 +17,19 @@ abstract class AbstractEntity
 
 	private array $__snapshot = [];
 
+
 	final public function __construct(array $result)
 	{
 		$this->__snapshot = $this->hydrate($result);
 	}
 
 
+	/**
+	 * @throws BadMethodCallException
+	 */
 	public function __clone()
 	{
-		// throw new MethodNotAllowedException;
+		throw new BadMethodCallException;
 	}
 
 
@@ -55,6 +61,6 @@ abstract class AbstractEntity
 			$this->$key = $value ?: null;
 		}
 
-		return $this->snapshot();;
+		return $this->snapshot();
 	}
 }
