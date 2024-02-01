@@ -60,14 +60,15 @@ class Client extends AbstractEntity implements HtmlOption
 
 	public function createOption(): Html
 	{
+		$fullName = $this->getFullName();
 		$params = [
-			'%companyName%' => $this->companyname ?? $this->fullname,
-			'%fullName%' => $this->getFullName(),
+			'%companyName%' => $this->companyname ?? $fullName,
+			'%fullName%' => $fullName,
 			'%email%' => $this->email,
 			'%id%' => $this->id,
 		];
 
-		if ($this->fullname == $this->companyname) {
+		if ($fullName == $this->companyname) {
 			$params['%fullName%'] = null;
 		}
 
