@@ -11,6 +11,7 @@ use BadMethodCallException;
 
 abstract class AbstractEntity
 {
+	protected const PropertyTranslate = [];
 	protected const SnapshotExclude = [
 		'__snapshot' => true,
 	];
@@ -41,7 +42,14 @@ abstract class AbstractEntity
 
 	public function changes(): array
 	{
-		return array_diff_assoc($this->snapshot(), $this->__snapshot);
+		$changes = array_diff_assoc($this->snapshot(), $this->__snapshot);
+
+		foreach (static::PropertyTranslate as $from => $to) {
+			$changes[$to] = $changes[$from] ?? null;
+			unset($changes[$from]);
+		}
+
+		return $changes;
 	}
 
 

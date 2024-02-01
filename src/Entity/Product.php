@@ -13,6 +13,10 @@ class Product extends AbstractEntity
 {
 	use Tools\Identifier;
 
+	protected const PropertyTranslate = [
+		'id' => 'serviceid',
+	];
+
 	protected ?int $clientid;
 	protected ?int $pid;
 	protected ?string $name;
