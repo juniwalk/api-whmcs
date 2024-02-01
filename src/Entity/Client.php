@@ -62,7 +62,7 @@ class Client extends AbstractEntity implements HtmlOption
 	{
 		$params = [
 			'%companyName%' => $this->companyname ?? $this->fullname,
-			'%fullName%' => $this->fullname,
+			'%fullName%' => $this->getFullName(),
 			'%email%' => $this->email,
 			'%id%' => $this->id,
 		];
