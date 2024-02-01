@@ -42,10 +42,11 @@ abstract class AbstractEntity
 
 	public function changes(): array
 	{
-		$changes = array_diff_assoc($this->snapshot(), $this->__snapshot);
+		$snapshot = $this->snapshot();
+		$changes = array_diff_assoc($snapshot, $this->__snapshot);
 
 		foreach (static::PropertyTranslate as $from => $to) {
-			$changes[$to] = $changes[$from] ?? null;
+			$changes[$to] = $snapshot[$from] ?? null;
 			unset($changes[$from]);
 		}
 
