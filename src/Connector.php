@@ -9,6 +9,7 @@ namespace JuniWalk\WHMCS;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use JuniWalk\WHMCS\Exceptions\RequestException;
 use JuniWalk\WHMCS\Exceptions\ResponseException;
 use Nette\Schema\Expect;
 use Nette\Schema\Processor;
