@@ -29,14 +29,13 @@ class Connector
 
 	private Client $http;
 
-
 	public function __construct(
 		private string $url,
 		private string $identifier,
 		private string $secret,
 		private string $adminDir,
 		private ?string $accessKey = null,
-		iterable $params = []
+		array $params = [],
 	) {
 		$this->http = new Client($params + [
 			'base_uri' => $url,
@@ -49,7 +48,7 @@ class Connector
 	 * @throws RequestException
 	 * @throws ResponseException
 	 */
-	public function call(string $action, iterable $params = []): iterable
+	public function call(string $action, array $params = []): array
 	{
 		$params = array_merge($params, [
 			'identifier' => $this->identifier,
@@ -82,7 +81,7 @@ class Connector
 	/**
 	 * @throws ValidationException
 	 */
-	protected function check(iterable $params, iterable $schema): iterable
+	protected function check(array $params, array $schema): array
 	{
 		$schema = Expect::structure($schema)
 			->skipDefaults()
