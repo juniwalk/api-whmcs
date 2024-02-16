@@ -30,6 +30,19 @@ trait ProductSubSystem
 
 
 	/**
+	 * Custom API call
+	 */
+	public function findDiskLimitByDomain(string $domainName): ?int
+	{
+		$result = $this->call('FindDiskLimitByDomain', [
+			'domain' => $domainName,
+		]);
+
+		return $result['diskLimit'] ?? null;
+	}
+
+
+	/**
 	 * @see https://developers.whmcs.com/api-reference/updateclientproduct/
 	 */
 	public function updateClientProduct(Product $product): bool

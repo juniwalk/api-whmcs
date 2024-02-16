@@ -75,6 +75,12 @@ class Product extends AbstractEntity
 	}
 
 
+	public function setDiskLimit(?int $disklimit): void
+	{
+		$this->disklimit = $disklimit ?? 0;
+	}
+
+
 	public function getDiskLimit(): ?int
 	{
 		return $this->disklimit;
