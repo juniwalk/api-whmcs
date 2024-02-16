@@ -17,7 +17,7 @@ trait ProductSubSystem
 	 */
 	public function getHostingByDomain(string $domainName): ?Product
 	{
-		$result = $this->whmcs->call('GetHostingByDomain', [
+		$result = $this->call('GetHostingByDomain', [
 			'domain' => $domainName,
 		]);
 
