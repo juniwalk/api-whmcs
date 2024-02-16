@@ -13,6 +13,19 @@ use Nette\Schema\Expect;
 trait ProductSubSystem
 {
 	/**
+	 * Custom API call
+	 */
+	public function getHostingByDomain(string $domainName): ?Product
+	{
+		$result = $this->whmcs->call('GetHostingByDomain', [
+			'domain' => $domainName,
+		]);
+
+		return Product::fromResult($result['product']);
+	}
+
+
+	/**
 	 * @see https://developers.whmcs.com/api-reference/updateclientproduct/
 	 */
 	public function updateClientProduct(Product $product): bool
