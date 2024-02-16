@@ -60,7 +60,7 @@ try {
 		->where('h.domainstatus', 'Active');
 
 	if (!$product = $query->get()[0] ?? null) {
-		throw new Exception('Hosting was not found');
+		throw new Exception('Hosting was not found for domain '.$domainName);
 	}
 
 	$apiresults = [
