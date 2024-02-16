@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 
 /**
- * @copyright Martin Procházka (c) 2024
+ * @copyright Martin Procházka (c) 2022
  * @license   MIT License
  */
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Exception;
 
 if (!defined("WHMCS")) die("This file cannot be accessed directly");
 
@@ -36,7 +37,7 @@ try {
 	$request = get_env($vars);
 
 	if (!$domainName = $request->domain ?? null) {
-		throw new \Exception('Domain name is empty');
+		throw new Exception('Domain name is empty');
 	}
 
 	$query = Capsule::table('tblhosting AS h')
@@ -58,13 +59,13 @@ try {
 		->where('h.domain', $domainName)
 		->where('h.domainstatus', 'Active');
 
-	if (!$products = $query->get()) {
-		throw new \Exception('Hostign was not found');
+	if (!$product = $query->get()[0] ?? null) {
+		throw new Exception('Hosting was not found');
 	}
 
 	$apiresults = [
 		'result' => 'success',
-		'product' => $products[0],
+		'product' => $product,
 	];
 
 } catch (Exception $e) {

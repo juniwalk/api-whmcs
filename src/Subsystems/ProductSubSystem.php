@@ -15,13 +15,17 @@ trait ProductSubSystem
 	/**
 	 * Custom API call
 	 */
-	public function getHostingByDomain(string $domainName): ?Product
+	public function getHostingByDomain(string $domainName): Product
 	{
 		$result = $this->call('GetHostingByDomain', [
 			'domain' => $domainName,
 		]);
 
-		return Product::fromResult($result['product']);
+		if ($product = $result['product'] ?? null) {
+			$product = Product::fromResult($product);
+		}
+
+		return $product;
 	}
 
 
