@@ -14,8 +14,8 @@
 	"require": {
 		"php": ">=8.1",
 		"guzzlehttp/guzzle": "^7.0",
-		"juniwalk/orm": ">=0.1.30",
-		"juniwalk/utils": ">=2.3.34",
+		"juniwalk/orm": "^0.9",
+		"juniwalk/utils": "^3.0.0",
 		"nette/schema": "^1.0"
 	},
 

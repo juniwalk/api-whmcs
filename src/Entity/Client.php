@@ -7,7 +7,7 @@
 
 namespace JuniWalk\WHMCS\Entity;
 
-use JuniWalk\ORM\Interfaces\HtmlOption;
+use JuniWalk\ORM\Entity\Interfaces\HtmlOption;
 use JuniWalk\Utils\Html;
 use JuniWalk\WHMCS\Traits as Tools;
 
