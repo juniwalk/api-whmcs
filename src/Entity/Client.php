@@ -8,6 +8,7 @@
 namespace JuniWalk\WHMCS\Entity;
 
 use JuniWalk\ORM\Entity\Interfaces\HtmlOption;
+use JuniWalk\ORM\Enums\Display;
 use JuniWalk\Utils\Html;
 use JuniWalk\WHMCS\Traits as Tools;
 
@@ -58,7 +59,7 @@ class Client extends AbstractEntity implements HtmlOption
 	}
 
 
-	public function createOption(): Html
+	public function createOption(?Display $display = null): Html
 	{
 		$fullName = $this->getFullName();
 		$params = [
