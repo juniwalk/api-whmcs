@@ -9,8 +9,11 @@ namespace JuniWalk\WHMCS\Exceptions;
 
 final class ResponseException extends WHMCSException
 {
-	public static function fromResult(string $action, iterable $result): static
+	/**
+	 * @param array{result: string, message?: string} $content
+	 */
+	public static function fromResult(string $action, array $content): static
 	{
-		return new static($action.': '.$result['message']);
+		return new static($action.': '.($content['message'] ?? $content['result']));
 	}
 }

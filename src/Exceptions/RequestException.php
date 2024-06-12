@@ -11,7 +11,7 @@ use Throwable;
 
 final class RequestException extends WHMCSException
 {
-	public static function fromAction(string $action, Throwable $e = null): static
+	public static function fromAction(string $action, ?Throwable $e = null): static
 	{
 		return new static('Request of '.$action.' in WHMCS api has failed.', 0, $e);
 	}
