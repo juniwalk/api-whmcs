@@ -24,19 +24,13 @@ enum InvoiceStatus: string implements LabeledEnum
 
 	public function label(): string
 	{
-		return match($this) {
-			self::Draft => 'whmcs.enum.invoice-status.draft',
-			self::Paid => 'whmcs.enum.invoice-status.paid',
-			self::Unpaid => 'whmcs.enum.invoice-status.unpaid',
-			self::Cancelled => 'whmcs.enum.invoice-status.cancelled',
-			self::Overdue => 'whmcs.enum.invoice-status.overdue',
-		};
+		return 'whmcs.enum.invoice-status.'.$this->value;
 	}
 
 
 	public function color(): Color
 	{
-		return match($this) {
+		return match ($this) {
 			self::Draft => Color::Secondary,
 			self::Paid => Color::Success,
 			self::Unpaid => Color::Danger,

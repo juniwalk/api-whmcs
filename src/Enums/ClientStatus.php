@@ -22,17 +22,13 @@ enum ClientStatus: string implements LabeledEnum
 
 	public function label(): string
 	{
-		return match($this) {
-			self::Active => 'whmcs.enum.client-status.active',
-			self::Inactive => 'whmcs.enum.client-status.inactive',
-			self::Closed => 'whmcs.enum.client-status.closed',
-		};
+		return 'whmcs.enum.client-status.'.$this->value;
 	}
 
 
 	public function color(): Color
 	{
-		return match($this) {
+		return match ($this) {
 			self::Active => Color::Success,
 			self::Inactive => Color::Secondary,
 			self::Closed => Color::Danger,
