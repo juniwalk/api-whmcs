@@ -5,16 +5,17 @@
  * @license   MIT License
  */
 
-namespace JuniWalk\WHMCS\Subsystems;
+namespace JuniWalk\WHMCS\SubSystems;
 
 use Nette\Schema\Expect;
 
-trait DomainSubsystem
+trait DomainSubSystem
 {
 	/**
+	 * @param array<string, scalar> $params
 	 * @see https://developers.whmcs.com/api-reference/updateclientdomain/
 	 */
-	public function updateClientDomain(int $domainId, iterable $params): bool
+	public function updateClientDomain(int $domainId, array $params): bool
 	{
 		$params['domainid'] = $domainId;
 		$params = $this->check($params, [

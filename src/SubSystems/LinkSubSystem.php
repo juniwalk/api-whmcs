@@ -5,9 +5,9 @@
  * @license   MIT License
  */
 
-namespace JuniWalk\WHMCS\Subsystems;
+namespace JuniWalk\WHMCS\SubSystems;
 
-trait LinkSubsystem
+trait LinkSubSystem
 {
 	public function createClientLink(int $clientId): string
 	{

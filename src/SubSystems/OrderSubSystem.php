@@ -5,17 +5,24 @@
  * @license   MIT License
  */
 
-namespace JuniWalk\WHMCS\Subsystems;
+namespace JuniWalk\WHMCS\SubSystems;
 
-use JuniWalk\WHMCS\Tools\ItemIterator;
+use JuniWalk\Utils\Arrays;
+use JuniWalk\WHMCS\Connector;	// ! Used for @phpstan
+use JuniWalk\WHMCS\Entity\Product;
+use JuniWalk\WHMCS\ItemIterator;
 use Nette\Schema\Expect;
 
-trait OrderSubsystem
+/**
+ * @phpstan-import-type ResultList from Connector
+ */
+trait OrderSubSystem
 {
 	/**
+	 * @param array<string, scalar> $params
 	 * @see https://developers.whmcs.com/api-reference/acceptorder/
 	 */
-	public function acceptOrder(int $orderId, array $params): array
+	public function acceptOrder(int $orderId, array $params): bool
 	{
 		$params['orderid'] = $orderId;
 		$params = $this->check($params, [
@@ -29,11 +36,14 @@ trait OrderSubsystem
 			'sendemail'				=> Expect::bool(),
 		]);
 
-		return $this->call('AcceptOrder', $params);
+		$response = $this->call('AcceptOrder', $params);
+		return $response['result'] === 'success';
 	}
 
 
 	/**
+	 * @param  array<string, scalar> $params
+	 * @return array<string, int|string>
 	 * @see https://developers.whmcs.com/api-reference/addorder/
 	 */
 	public function addOrder(int $clientId, string $paymentMethod, array $params): array
@@ -51,28 +61,37 @@ trait OrderSubsystem
 			'noemail'				=> Expect::bool(),
 		]);
 
+		/** @var array<string, int|string> */
 		return $this->call('AddOrder', $params);
 	}
 
 
 	/**
+	 * @return ItemIterator<Product>
 	 * @see https://developers.whmcs.com/api-reference/getproducts/
 	 */
 	public function getProducts(
 		string $productId = '',
 		int $groupId = null,
-		string $module = null
+		string $module = null,
 	): ItemIterator {
-		$data = $this->call('GetProducts', [
+		/** @var ResultList */
+		$response = $this->call('GetProducts', [
 			'pid' => $productId,
 			'gid' => $groupId,
 			'module' => $module,
 		]);
 
-		$items = new ItemIterator($data['products']['product'] ?? []);
-		$items->setTotalResults($data['totalresults']);
-		$items->setOffset($data['startnumber'] ?? 0);
-		$items->setLimit($data['numreturned'] ?? 0);
-		return $items;
+		/** @var Product[] */
+		$items = Arrays::map(
+			$response['products']['product'] ?? [],	// @phpstan-ignore nullCoalesce.offset
+			fn($x) => new Product($x),
+		);
+
+		/** @var ItemIterator<Product> */
+		return (new ItemIterator($items))
+			->setTotalResults($response['totalresults'])
+			->setOffset($response['startnumber'] ?? 0)
+			->setLimit($response['numreturned'] ?? 0);
 	}
 }

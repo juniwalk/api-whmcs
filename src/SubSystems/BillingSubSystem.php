@@ -5,49 +5,60 @@
  * @license   MIT License
  */
 
-namespace JuniWalk\WHMCS\Subsystems;
+namespace JuniWalk\WHMCS\SubSystems;
 
+use JuniWalk\Utils\Arrays;
+use JuniWalk\WHMCS\Connector;	// ! Used for @phpstan
+use JuniWalk\WHMCS\Entity\Invoice;
+use JuniWalk\WHMCS\Entity\Transaction;
 use JuniWalk\WHMCS\Enums\InvoiceStatus;
 use JuniWalk\WHMCS\Enums\Sort;
-use JuniWalk\WHMCS\Tools\ItemIterator;
+use JuniWalk\WHMCS\ItemIterator;
 use Nette\Schema\Expect;
 
-trait BillingSubsystem
+/**
+ * @phpstan-import-type ResultList from Connector
+ */
+trait BillingSubSystem
 {
 	/**
+	 * @param array<string, ?scalar> $params
 	 * @see https://developers.whmcs.com/api-reference/addbillableitem/
 	 */
-	public function addBillableItem(int $clientId, string $description, float $amount, iterable $params): array
+	public function addBillableItem(int $clientId, string $description, float $amount, array $params): int
 	{
 		$params['clientid'] = $clientId;
 		$params['description'] = $description;
 		$params['amount'] = $amount;
 		$params['unit'] ??= 'quantity';
 		$params = $this->check($params, [
-			'clientid'				=> Expect::int()->required(),
-			'description'			=> Expect::string()->required(),
-			'amount'				=> Expect::float()->required(),
-			'unit'					=> Expect::string()->required(),
-			'quantity'				=> Expect::float()->default(1),
-			'invoiceaction'			=> Expect::string()->default('duedate'),
-			'recur'					=> Expect::int(),
-			'recurcycle'			=> Expect::string(),
-			'recurfor'				=> Expect::int(),
-			'duedate'				=> Expect::string(),
+			'clientid'			=> Expect::int()->required(),
+			'description'		=> Expect::string()->required(),
+			'amount'			=> Expect::float()->required(),
+			'unit'				=> Expect::string()->required(),
+			'quantity'			=> Expect::float()->default(1),
+			'invoiceaction'		=> Expect::string()->default('duedate'),
+			'recur'				=> Expect::int(),
+			'recurcycle'		=> Expect::string(),
+			'recurfor'			=> Expect::int(),
+			'duedate'			=> Expect::string(),
 		]);
 
 		// if ($params['invoiceaction'] == 'duedate') {
 		// 	$schema['duedate']->required();
 		// }
 
-		return $this->call('AddBillableItem', $params);
+		/** @var array{result: string, billableid: int} */
+		$response = $this->call('AddBillableItem', $params);
+		return $response['billableid'];
 	}
 
 
 	/**
+	 * @param  array<string, ?scalar> $params
 	 * @see https://developers.whmcs.com/api-reference/addtransaction/
 	 */
-	public function addTransaction(string $paymentMethod, iterable $params): bool
+	public function addTransaction(string $paymentMethod, array $params): bool
 	{
 		$params['paymentmethod'] = $paymentMethod;
 		$params = $this->check($params, [
@@ -72,29 +83,41 @@ trait BillingSubsystem
 
 
 	/**
+	 * @return ItemIterator<Transaction>
 	 * @see https://developers.whmcs.com/api-reference/gettransactions/
 	 */
 	public function getTransactions(
-		int $invoiceId = null,
-		int $clientId = null,
-		string $transactionId = null
+		?int $invoiceId = null,
+		?int $clientId = null,
+		?string $transactionId = null
 	): ItemIterator {
-		$data = $this->call('GetTransactions', [
+		/** @var ResultList */
+		$response = $this->call('GetTransactions', [
 			'invoiceid' => $invoiceId,
 			'clientid' => $clientId,
 			'transid' => $transactionId,
 		]);
 
-		$items = new ItemIterator($data['transactions']['transaction'] ?? []);
-		$items->setTotalResults($data['totalresults']);
-		$items->setOffset($data['startnumber']);
-		$items->setLimit($data['numreturned']);
-		return $items;
+		/** @var Transaction[] */
+		$items = Arrays::map(
+			$response['transactions']['transaction'] ?? [],		// @phpstan-ignore nullCoalesce.offset
+			fn($x) => new Transaction($x),
+		);
+
+		/** @var ItemIterator<Transaction> */
+		return (new ItemIterator($items))
+			->setTotalResults($response['totalresults'])
+			->setOffset($response['startnumber'] ?? 0)
+			->setLimit($response['numreturned'] ?? 0);
 	}
+
+
 	/**
+	 * @param  array<string, ?scalar> $params
+	 * @return array<string, int|string>
 	 * @see https://developers.whmcs.com/api-reference/createinvoice/
 	 */
-	public function createInvoice(int $userId, iterable $params): array
+	public function createInvoice(int $userId, array $params): array
 	{
 		$params['userid'] = $userId;
 		$params = $this->check($params, [
@@ -116,40 +139,48 @@ trait BillingSubsystem
 			])),
 		]);
 
-		foreach ($params['item'] ?? [] as $index => $item) {
-			foreach ($item as $key => $value) {
+		foreach ($params['item'] ?? [] as $index => $item) {	// @phpstan-ignore foreach.nonIterable
+			foreach ($item as $key => $value) {					// @phpstan-ignore foreach.nonIterable
 				$params['item'.$key.$index] = $value;
 			}
 		}
 
 		unset($params['item']);
 
-		return $this->call('CreateInvoice', $params);
+		/** @var array{result: string, invoiceid: int, status: string} */
+		$response = $this->call('CreateInvoice', $params);
+		return $response;
 	}
 
 
 	/**
 	 * @see https://developers.whmcs.com/api-reference/getinvoice/
 	 */
-	public function getInvoice(int $invoiceId): iterable {
-		return $this->call('GetInvoice', [
+	public function getInvoice(int $invoiceId): Invoice
+	{
+		/** @var array<string, ?scalar> */
+		$response = $this->call('GetInvoice', [
 			'invoiceid' => $invoiceId,
 		]);
+
+		return new Invoice($response);
 	}
 
 
 	/**
+	 * @return ItemIterator<Invoice>
 	 * @see https://developers.whmcs.com/api-reference/getinvoices/
 	 */
 	public function getInvoices(
-		int $userId = null,
-		InvoiceStatus $status = null,
-		string $orderBy = null,
+		?int $userId = null,
+		?InvoiceStatus $status = null,
+		?string $orderBy = null,
 		Sort $sort = Sort::ASC,
 		int $offset = 0,
 		int $limit = 25
 	): ItemIterator {
-		$data = $this->call('GetInvoices', [
+		/** @var ResultList */
+		$response = $this->call('GetInvoices', [
 			'limitstart' => $offset,
 			'limitnum' => $limit,
 			'userid' => $userId,
@@ -158,21 +189,25 @@ trait BillingSubsystem
 			'order' => $sort->name,
 		]);
 
-		$items = new ItemIterator($data['invoices']['invoice'] ?? []);
-		$items->setTotalResults($data['totalresults']);
-		$items->setOffset($data['startnumber']);
-		$items->setLimit($data['numreturned']);
-		return $items;
+		/** @var Invoice[] */
+		$items = Arrays::map(
+			$response['invoices']['invoice'] ?? [],		// @phpstan-ignore nullCoalesce.offset
+			fn($x) => new Invoice($x),
+		);
+
+		/** @var ItemIterator<Invoice> */
+		return (new ItemIterator($items))
+			->setTotalResults($response['totalresults'])
+			->setOffset($response['startnumber'] ?? 0)
+			->setLimit($response['numreturned'] ?? 0);
 	}
 
 
 	/**
-	 * @param  int $invoiceId
-	 * @param  mixed[]  $params
-	 * @return bool
+	 * @param array<string, ?scalar> $params
 	 * @see https://developers.whmcs.com/api-reference/updateinvoice/
 	 */
-	public function updateInvoice(int $invoiceId, iterable $params): bool
+	public function updateInvoice(int $invoiceId, array $params): bool
 	{
 		$params['invoiceid'] = $invoiceId;
 		$params = $this->check($params, [

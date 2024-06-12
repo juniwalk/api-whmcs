@@ -5,7 +5,7 @@
  * @license   MIT License
  */
 
-namespace JuniWalk\WHMCS\Subsystems;
+namespace JuniWalk\WHMCS\SubSystems;
 
 use JuniWalk\WHMCS\Entity\Product;
 use Nette\Schema\Expect;
@@ -15,17 +15,18 @@ trait ProductSubSystem
 	/**
 	 * Custom API call
 	 */
-	public function getHostingByDomain(string $domainName): Product
+	public function getHostingByDomain(string $domainName): ?Product
 	{
-		$result = $this->call('GetHostingByDomain', [
+		/** @var array{result: string, product?: array<string, ?scalar>} */
+		$response = $this->call('GetHostingByDomain', [
 			'domain' => $domainName,
 		]);
 
-		if ($product = $result['product'] ?? null) {
-			$product = Product::fromResult($product);
+		if (!isset($response['product'])) {
+			return null;
 		}
 
-		return $product;
+		return new Product($response['product']);
 	}
 
 
@@ -34,11 +35,12 @@ trait ProductSubSystem
 	 */
 	public function findDiskLimitByDomain(string $domainName): ?int
 	{
-		$result = $this->call('FindDiskLimitByDomain', [
+		/** @var array{result: string, diskLimit?: int} */
+		$response = $this->call('FindDiskLimitByDomain', [
 			'domain' => $domainName,
 		]);
 
-		return $result['diskLimit'] ?? null;
+		return $response['diskLimit'] ?? null;
 	}
 
 
@@ -47,8 +49,7 @@ trait ProductSubSystem
 	 */
 	public function updateClientProduct(Product $product): bool
 	{
-		$params = $product->changes();
-		$params = $this->check($params, [
+		$params = $this->check($product->changes(), [
 			'serviceid'				=> Expect::int()->required(),
 			'pid'					=> Expect::int(),
 			'serverid'				=> Expect::int(),
