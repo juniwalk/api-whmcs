@@ -35,6 +35,6 @@ final class WhmcsExtension extends CompilerExtension
 		$config = $this->getConfig();
 
 		$builder->addDefinition($this->prefix('connector'))
-			->setFactory(Connector::class, $config);
+			->setFactory(Connector::class, (array) $config);
 	}
 }
