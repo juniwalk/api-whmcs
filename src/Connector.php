@@ -13,22 +13,34 @@ use JuniWalk\WHMCS\Exceptions\RequestException;
 use JuniWalk\WHMCS\Exceptions\ResponseException;
 use Nette\Schema\Expect;
 use Nette\Schema\Processor;
+use Nette\Schema\Schema;
 use Nette\Schema\ValidationException;
 use UnitEnum;
 
+/**
+ * @phpstan-type ResultList array{
+ * 		result: string,
+ * 		totalresults: int,
+ * 		startnumber?: int,
+ * 		numreturned?: int,
+ * }
+ */
 class Connector
 {
-	use Subsystems\ClientSubsystem;
-	use Subsystems\BillingSubsystem;
-	use Subsystems\DomainSubsystem;
-	use Subsystems\LinkSubsystem;
-	use Subsystems\OrderSubsystem;
-	use Subsystems\ProductSubSystem;
-	use Subsystems\SystemSubsystem;
-	use Subsystems\UserSubsystem;
+	use SubSystems\ClientSubSystem;
+	use SubSystems\BillingSubSystem;
+	use SubSystems\DomainSubSystem;
+	use SubSystems\LinkSubSystem;
+	use SubSystems\OrderSubSystem;
+	use SubSystems\ProductSubSystem;
+	use SubSystems\SystemSubSystem;
+	use SubSystems\UserSubSystem;
 
 	private Client $http;
 
+	/**
+	 * @param array<string, mixed> $params
+	 */
 	public function __construct(
 		private string $url,
 		private string $identifier,
@@ -45,6 +57,8 @@ class Connector
 
 
 	/**
+	 * @param  array<string, mixed> $params
+	 * @return array<string, mixed>
 	 * @throws RequestException
 	 * @throws ResponseException
 	 */
@@ -67,18 +81,22 @@ class Connector
 			throw RequestException::fromAction($action, $e);
 		}
 
-		$result = $response->getBody()->getContents();
-		$result = json_decode($result, true);
+		$content = $response->getBody()->getContents();
+		/** @var array{result: string, message?: string} */
+		$content = json_decode($content, true);
 
-		if (($result['result'] ?? $result['status']) === 'error') {
-			throw ResponseException::fromResult($action, $result);
+		if ($content['result'] === 'error') {
+			throw ResponseException::fromResult($action, $content);
 		}
 
-		return $result;
+		return $content;
 	}
 
 
 	/**
+	 * @param  array<string, mixed> $params
+	 * @param  array<string, Schema> $schema
+	 * @return array<string, mixed>
 	 * @throws ValidationException
 	 */
 	protected function check(array $params, array $schema): array
@@ -88,6 +106,7 @@ class Connector
 			->castTo('array');
 
 		try {
+			/** @var array<string, mixed> */
 			$params = (new Processor)->process($schema, $params);
 
 		} catch (ValidationException $e) {
