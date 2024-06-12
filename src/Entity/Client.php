@@ -10,32 +10,36 @@ namespace JuniWalk\WHMCS\Entity;
 use JuniWalk\ORM\Entity\Interfaces\HtmlOption;
 use JuniWalk\ORM\Enums\Display;
 use JuniWalk\Utils\Html;
-use JuniWalk\WHMCS\Traits as Tools;
 
 class Client extends AbstractEntity implements HtmlOption
 {
-	use Tools\Identifier;
-
-	protected ?string $firstname;
-	protected ?string $lastname;
+	protected int $id;
+	protected string $firstname;
+	protected string $lastname;
 	protected ?string $companyname;
-	protected ?string $email;
+	protected string $email;
 	protected ?string $phonenumber;
 
 
-	public function getFirstName(): ?string
+	public function getId(): int
+	{
+		return $this->id;
+	}
+
+
+	public function getFirstName(): string
 	{
 		return $this->firstname;
 	}
 
 
-	public function getLastName(): ?string
+	public function getLastName(): string
 	{
 		return $this->lastname;
 	}
 
 
-	public function getFullName(): ?string
+	public function getFullName(): string
 	{
 		return $this->firstname.' '.$this->lastname;
 	}
@@ -47,7 +51,7 @@ class Client extends AbstractEntity implements HtmlOption
 	}
 
 
-	public function getEmail(): ?string
+	public function getEmail(): string
 	{
 		return $this->email;
 	}

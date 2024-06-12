@@ -7,16 +7,13 @@
 
 namespace JuniWalk\WHMCS\Entity;
 
-use JuniWalk\WHMCS\Traits as Tools;
-
 class Product extends AbstractEntity
 {
-	use Tools\Identifier;
-
 	protected const PropertyTranslate = [
 		'id' => 'serviceid',
 	];
 
+	protected int $id;
 	protected ?int $clientid;
 	protected ?int $pid;
 	protected ?string $name;
@@ -25,6 +22,12 @@ class Product extends AbstractEntity
 	protected ?string $status;
 	protected ?int $diskusage;
 	protected ?int $disklimit;
+
+
+	public function getId(): int
+	{
+		return $this->id;
+	}
 
 
 	public function getClientId(): ?int
