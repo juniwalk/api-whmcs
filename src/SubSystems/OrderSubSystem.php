@@ -71,13 +71,13 @@ trait OrderSubSystem
 	 * @see https://developers.whmcs.com/api-reference/getproducts/
 	 */
 	public function getProducts(
-		string $productId = '',
-		int $groupId = null,
-		string $module = null,
+		int|string|null $productId = null,
+		?int $groupId = null,
+		?string $module = null,
 	): ItemIterator {
 		/** @var ResultList */
 		$response = $this->call('GetProducts', [
-			'pid' => $productId,
+			'pid' => (string) $productId,
 			'gid' => $groupId,
 			'module' => $module,
 		]);

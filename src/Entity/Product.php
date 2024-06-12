@@ -7,6 +7,17 @@
 
 namespace JuniWalk\WHMCS\Entity;
 
+/**
+ * @phpstan-type Price array{
+ * 		monthly: float,
+ * 		quarterly: float,
+ * 		semiannually: float,
+ * 		annually: float,
+ * 		biennially: float,
+ * 		triennially: float,
+ * }
+ * @phpstan-type PriceList array<string, Price>
+ */
 class Product extends AbstractEntity
 {
 	protected const PropertyTranslate = [
@@ -15,13 +26,21 @@ class Product extends AbstractEntity
 
 	protected int $id;
 	protected ?int $clientid;
-	protected ?int $pid;
-	protected ?string $name;
+	protected int $pid;
+	protected ?int $gid;
+	protected ?string $type;
+	protected string $name;
+	protected ?string $slug;
+	protected ?string $description;
 	protected ?string $groupname;
 	protected ?string $domain;
+	protected ?string $paytype;
 	protected ?string $status;
 	protected ?int $diskusage;
 	protected ?int $disklimit;
+
+	/** @var PriceList */
+	protected array $pricing;
 
 
 	public function getId(): int
@@ -36,15 +55,33 @@ class Product extends AbstractEntity
 	}
 
 
-	public function getPackageId(): ?int
+	public function getPackageId(): int
 	{
 		return $this->pid;
 	}
 
 
-	public function getName(): ?string
+	public function getType(): ?string
+	{
+		return $this->type;
+	}
+
+
+	public function getName(): string
 	{
 		return $this->name;
+	}
+
+
+	public function getDescription(): ?string
+	{
+		return $this->description;
+	}
+
+
+	public function getGroupId(): ?int
+	{
+		return $this->gid;
 	}
 
 
@@ -57,6 +94,12 @@ class Product extends AbstractEntity
 	public function getDomain(): ?string
 	{
 		return $this->domain;
+	}
+
+
+	public function getPayType(): ?string
+	{
+		return $this->paytype;
 	}
 
 
@@ -97,5 +140,14 @@ class Product extends AbstractEntity
 		}
 
 		return $this->diskusage >= $this->disklimit;
+	}
+
+
+	/**
+	 * @return PriceList
+	 */
+	public function getPricing(): array
+	{
+		return $this->pricing;
 	}
 }
