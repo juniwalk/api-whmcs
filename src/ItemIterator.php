@@ -5,18 +5,28 @@
  * @license   MIT License
  */
 
-namespace JuniWalk\WHMCS\Tools;
+namespace JuniWalk\WHMCS;
 
-class ItemIterator extends \ArrayIterator
+use ArrayIterator;
+
+/**
+ * @template T
+ * @extends ArrayIterator<int, T>
+ */
+class ItemIterator extends ArrayIterator
 {
 	protected ?int $totalResults;
 	protected ?int $offset;
 	protected ?int $limit;
 
 
-	public function setTotalResults(?int $totalResults): void
+	/**
+	 * @return self<T>
+	 */
+	public function setTotalResults(?int $totalResults): self
 	{
 		$this->totalResults = $totalResults;
+		return $this;
 	}
 
 
@@ -26,9 +36,13 @@ class ItemIterator extends \ArrayIterator
 	}
 
 
-	public function setOffset(?int $offset): void
+	/**
+	 * @return self<T>
+	 */
+	public function setOffset(?int $offset): self
 	{
 		$this->offset = $offset;
+		return $this;
 	}
 
 
@@ -38,9 +52,13 @@ class ItemIterator extends \ArrayIterator
 	}
 
 
-	public function setLimit(?int $limit): void
+	/**
+	 * @return self<T>
+	 */
+	public function setLimit(?int $limit): self
 	{
 		$this->limit = $limit;
+		return $this;
 	}
 
 
