@@ -27,11 +27,11 @@ abstract class AbstractEntity
 
 
 	/**
-	 * @param array<string, ?scalar> $result
+	 * @param array<string, ?scalar> $snapshot
 	 */
-	final public function __construct(array $result)
+	final public function __construct(array $snapshot)
 	{
-		$this->__snapshot = $this->hydrate($result);
+		$this->__snapshot = $this->hydrate($snapshot);
 	}
 
 
