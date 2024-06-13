@@ -9,10 +9,8 @@ namespace JuniWalk\WHMCS\Entity;
 
 use BadMethodCallException;
 use DateTime;
-
+use JuniWalk\Utils\Arrays;
 use JuniWalk\Utils\Enums\Interfaces\LabeledEnum;
-use JuniWalk\WHMCS\Enums\InvoiceStatus;
-
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionType;
@@ -71,45 +69,44 @@ abstract class AbstractEntity
 	private function snapshot(): array
 	{
 		/** @var array<string, ?scalar> */
-		return array_diff_key(get_object_vars($this), self::SnapshotExclude);
+		$snapshot = array_diff_key(get_object_vars($this), self::SnapshotExclude);
+		return Arrays::walk($snapshot, fn($v, $k) => yield mb_strtolower($k) => $v);
 	}
 
 
 	/**
-	 * @param  array<string, ?scalar> $values
+	 * @param  array<string, ?scalar> $snapshot
 	 * @return array<string, ?scalar>
 	 */
-	private function hydrate(array $values): array
+	private function hydrate(array $snapshot): array
 	{
 		$class = new ReflectionClass($this);
 
 		foreach (static::PropertyTranslate as $to => $from) {
-			if (!isset($values[$from]) || isset($values[$to])) {
+			if (!isset($snapshot[$from]) || isset($snapshot[$to])) {
 				continue;
 			}
 
-			$values[$to] = $values[$from] ?? null;
+			$snapshot[$to] = $snapshot[$from] ?? null;
 		}
 
-		// TODO: Iterate over properties instead of values
-		// TODO: Look for the value using lowercase property name
+		foreach ($class->getProperties() as $property) {
+			$name = mb_strtolower($property->getName());
+			$value = $this->cast(
+				$snapshot[$name] ?? null,
+				$type = $property->getType(),
+			);
 
-		/** @var array<string, ?scalar> $values */
-		foreach ($values as $key => $value) {
-			if (!$class->hasProperty($key)) {
+			$isNullable = $type?->allowsNull() ?? true;
+
+			if (!$isNullable && is_null($value)) {
 				continue;
 			}
 
-			$property = $class->getProperty($key);
-			$type = $property->getType();
-
-			$value = $this->cast($value, $type);
-
-			if ($type?->allowsNull() ?? true) {
-				$value = $value ?: null;
-			}
-
-			$property->setValue($this, $value);
+			$property->setValue($this, match ($isNullable) {
+				true => $value ?: null,
+				default => $value,
+			});
 		}
 
 		return $this->snapshot();
