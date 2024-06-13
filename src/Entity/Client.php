@@ -7,18 +7,25 @@
 
 namespace JuniWalk\WHMCS\Entity;
 
+use DateTime;
 use JuniWalk\ORM\Entity\Interfaces\HtmlOption;
 use JuniWalk\ORM\Enums\Display;
+use JuniWalk\WHMCS\Enums\ClientStatus as Status;
 use JuniWalk\Utils\Html;
 
 class Client extends AbstractEntity implements HtmlOption
 {
 	protected int $id;
-	protected string $firstname;
-	protected string $lastname;
-	protected ?string $companyname;
+	protected int $groupId;
+	protected string $firstName;
+	protected string $lastName;
+	protected ?string $fullName;
+	protected ?string $companyName;
 	protected string $email;
-	protected ?string $phonenumber;
+	protected ?string $phoneNumber;
+	protected ?DateTime $dateCreated;
+	protected ?int $currency;
+	protected Status $status;
 
 
 	public function getId(): int
@@ -27,27 +34,33 @@ class Client extends AbstractEntity implements HtmlOption
 	}
 
 
+	public function getGroupId(): ?int
+	{
+		return $this->groupId;
+	}
+
+
 	public function getFirstName(): string
 	{
-		return $this->firstname;
+		return $this->firstName;
 	}
 
 
 	public function getLastName(): string
 	{
-		return $this->lastname;
+		return $this->lastName;
 	}
 
 
 	public function getFullName(): string
 	{
-		return $this->firstname.' '.$this->lastname;
+		return $this->fullName ?? $this->firstName.' '.$this->lastName;
 	}
 
 
 	public function getCompanyName(): ?string
 	{
-		return $this->companyname;
+		return $this->companyName;
 	}
 
 
@@ -59,7 +72,29 @@ class Client extends AbstractEntity implements HtmlOption
 
 	public function getPhoneNumber(): ?string
 	{
-		return $this->phonenumber;
+		return $this->phoneNumber;
+	}
+
+
+	public function getDateCreated(): ?DateTime
+	{
+		if (!isset($this->dateCreated)) {
+			return null;
+		}
+
+		return clone $this->dateCreated;
+	}
+
+
+	public function getCurrency(): ?int
+	{
+		return $this->currency;
+	}
+
+
+	public function getStatus(): ?Status
+	{
+		return $this->status;
 	}
 
 
@@ -67,13 +102,13 @@ class Client extends AbstractEntity implements HtmlOption
 	{
 		$fullName = $this->getFullName();
 		$params = [
-			'%companyName%' => $this->companyname ?? $fullName,
+			'%companyName%' => $this->companyName ?? $fullName,
 			'%fullName%' => $fullName,
 			'%email%' => $this->email,
 			'%id%' => $this->id,
 		];
 
-		if ($fullName == $this->companyname) {
+		if ($fullName == $this->companyName) {
 			$params['%fullName%'] = null;
 		}
 
