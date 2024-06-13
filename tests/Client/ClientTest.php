@@ -34,6 +34,8 @@ final class ClientTest extends TestCase
 		$whmcs = getConfig()->createConnector();
 		$item = $whmcs->getClientsDetails(clientId: 425);
 
+		Assert::same($item->getFullName(), static::Username);
+		Assert::same($item->getCurrency(), 1);
 		Assert::null($item->getDateCreated());
 	}
 }
