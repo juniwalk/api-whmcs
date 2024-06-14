@@ -9,11 +9,23 @@ namespace JuniWalk\WHMCS\Entity;
 
 use DateTime;
 use JuniWalk\WHMCS\Enums\InvoiceStatus as Status;
+use JuniWalk\Utils\Enums\Currency;
 
+/**
+ * @phpstan-type Item array{
+ * 		id: int,
+ * 		type: string,
+ * 		relid: int,
+ * 		description: string,
+ * 		amount: float,
+ * 		taxed: int,
+ * }
+ */
 class Invoice extends AbstractEntity
 {
 	protected const PropertyTranslate = [
 		'id' => 'invoiceid',
+		'currency' => 'currencycode',
 	];
 
 	protected int $id;
@@ -35,6 +47,10 @@ class Invoice extends AbstractEntity
 	protected string $paymentmethod;
 	protected ?string $notes;
 	// protected bool $ccgateway;
+	protected ?Currency $currency;
+
+	/** @var Item[] */
+	protected array $items;
 
 
 	public function getId(): int
@@ -116,5 +132,20 @@ class Invoice extends AbstractEntity
 	public function getNotes(): ?string
 	{
 		return $this->notes;
+	}
+
+
+	public function getCurrency(): ?Currency
+	{
+		return $this->currency;
+	}
+
+
+	/**
+	 * @return Item[]
+	 */
+	public function getItems(): array
+	{
+		return $this->items;
 	}
 }

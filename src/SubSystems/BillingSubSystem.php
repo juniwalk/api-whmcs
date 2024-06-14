@@ -163,6 +163,8 @@ trait BillingSubSystem
 			'invoiceid' => $invoiceId,
 		]);
 
+		$response['items'] = $response['items']['item'] ?? [];
+
 		return new Invoice($response);
 	}
 
