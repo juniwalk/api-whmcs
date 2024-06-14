@@ -7,14 +7,16 @@
 
 namespace JuniWalk\WHMCS\Entity;
 
+use JuniWalk\Utils\Enums\Currency as CurrencyEnum;
+
 class Currency extends AbstractEntity
 {
 	protected int $id;
-	protected ?string $code;
-	protected ?string $prefix;
-	protected ?string $suffix;
-	protected ?int $format;
-	protected ?float $rate;
+	protected string $code;
+	protected string $prefix;
+	protected string $suffix;
+	protected int $format;
+	protected float $rate;
 
 
 	public function getId(): int
@@ -23,32 +25,38 @@ class Currency extends AbstractEntity
 	}
 
 
-	public function getCode(): ?string
+	public function getCode(): string
 	{
 		return $this->code;
 	}
 
 
-	public function getPrefix(): ?string
+	public function getPrefix(): string
 	{
 		return $this->prefix;
 	}
 
 
-	public function getSuffix(): ?string
+	public function getSuffix(): string
 	{
 		return $this->suffix;
 	}
 
 
-	public function getFormat(): ?int
+	public function getFormat(): int
 	{
 		return $this->format;
 	}
 
 
-	public function getRate(): ?float
+	public function getRate(): float
 	{
-		return (float) $this->rate;
+		return $this->rate;
+	}
+
+
+	public function getEnum(): ?CurrencyEnum
+	{
+		return CurrencyEnum::make($this->code, false);
 	}
 }

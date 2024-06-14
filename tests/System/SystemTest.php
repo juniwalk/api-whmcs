@@ -5,6 +5,7 @@
  * @license   MIT License
  */
 
+use JuniWalk\Utils\Enums\Currency;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -25,6 +26,7 @@ final class SystemTest extends TestCase
 
 		foreach ($items as $item) {
 			Assert::contains($item->getCode(), ['CZK', 'EUR']);
+			Assert::type(Currency::class, $item->getEnum());
 		}
 	}
 }
