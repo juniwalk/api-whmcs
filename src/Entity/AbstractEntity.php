@@ -19,8 +19,12 @@ abstract class AbstractEntity
 {
 	protected const PropertyTranslate = [];
 	protected const SnapshotExclude = [
+		'__params' => true,
 		'__snapshot' => true,
 	];
+
+	/** @var array<string, ?scalar> */
+	private array $__params = [];
 
 	/** @var array<string, ?scalar> */
 	private array $__snapshot = [];
@@ -38,9 +42,18 @@ abstract class AbstractEntity
 	/**
 	 * @throws BadMethodCallException
 	 */
-	public function __clone()
+	final public function __clone(): void
 	{
 		throw new BadMethodCallException;
+	}
+
+
+	/**
+	 * @return ?scalar
+	 */
+	final public function getParam(string $name): mixed
+	{
+		return $this->__params[$name] ?? null;
 	}
 
 
@@ -107,8 +120,11 @@ abstract class AbstractEntity
 				true => $value ?: null,
 				default => $value,
 			});
+
+			unset($snapshot[$name]);
 		}
 
+		$this->__params = $snapshot;
 		return $this->snapshot();
 	}
 
