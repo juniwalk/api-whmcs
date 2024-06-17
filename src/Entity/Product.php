@@ -7,6 +7,8 @@
 
 namespace JuniWalk\WHMCS\Entity;
 
+use JuniWalk\WHMCS\Enums\DomainStatus as Status;
+
 /**
  * @phpstan-type Price array{
  * 		monthly: float,
@@ -35,7 +37,7 @@ class Product extends AbstractEntity
 	protected ?string $groupname;
 	protected ?string $domain;
 	protected ?string $paytype;
-	protected ?string $status;
+	protected ?Status $status;
 	protected ?int $diskusage;
 	protected ?int $disklimit;
 
