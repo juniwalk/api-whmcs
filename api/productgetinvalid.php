@@ -22,7 +22,7 @@ try {
 		->join('tblproducts AS p', 'h.packageid', '=', 'p.id')
 		->select(
 			'h.id AS id',
-			'c.id AS clientId',
+			'c.id AS clientid',
 			'p.id AS pid',
 			'p.name',
 			'h.domain AS domain',
