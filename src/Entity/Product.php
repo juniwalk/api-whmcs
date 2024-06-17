@@ -105,7 +105,7 @@ class Product extends AbstractEntity
 	}
 
 
-	public function getStatus(): ?string
+	public function getStatus(): ?Status
 	{
 		return $this->status;
 	}
