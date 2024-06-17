@@ -7,9 +7,15 @@
 
 namespace JuniWalk\WHMCS\SubSystems;
 
+use JuniWalk\Utils\Arrays;
+use JuniWalk\WHMCS\Connector;	// ! Used for @phpstan
 use JuniWalk\WHMCS\Entity\Product;
+use JuniWalk\WHMCS\ItemIterator;
 use Nette\Schema\Expect;
 
+/**
+ * @phpstan-import-type ResultList from Connector
+ */
 trait ProductSubSystem
 {
 	/**
@@ -86,5 +92,28 @@ trait ProductSubSystem
 
 		$response = $this->call('UpdateClientProduct', $params);
 		return $response['result'] === 'success';
+	}
+
+
+	/**
+	 * Custom API call
+	 * @return ItemIterator<Product>
+	 */
+	public function getProductsInvalid(): ItemIterator
+	{
+		/** @var ResultList */
+		$response = $this->call('ProductGetInvalid');
+
+		/** @var Product[] */
+		$items = Arrays::map(
+			$response['products']['product'] ?? [],	// @phpstan-ignore nullCoalesce.offset
+			fn($x) => new Product($x),
+		);
+
+		/** @var ItemIterator<Product> */
+		return (new ItemIterator($items))
+			->setTotalResults($response['totalresults'])
+			->setOffset($response['startnumber'] ?? 0)
+			->setLimit($response['numreturned'] ?? 0);
 	}
 }

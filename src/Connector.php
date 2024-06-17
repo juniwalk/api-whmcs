@@ -29,7 +29,6 @@ class Connector
 {
 	use SubSystems\BillingSubSystem;
 	use SubSystems\ClientSubSystem;
-	use SubSystems\CustomSubSystem;
 	use SubSystems\DomainSubSystem;
 	use SubSystems\LinkSubSystem;
 	use SubSystems\OrderSubSystem;
