@@ -11,6 +11,7 @@
  */
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Database\Query\Expression;
 
 defined('WHMCS') or die('This file cannot be accessed directly');
 
@@ -24,7 +25,7 @@ try {
 		->join('tblproducts_slugs AS s', type: 'left', first: function($join) {
 			$join->on('p.id', '=', 's.product_id');
 			$join->on('p.gid', '=', 's.group_id');
-			$join->on('s.active', '=', '1');
+			$join->on('s.active', '=', new Expression(1));
 		})
 		->select(
 			'h.id AS id',
@@ -33,6 +34,7 @@ try {
 			'p.gid',
 			'p.type',
 			'p.name',
+			's.slug',
 			'p.description',
 			'g.name as groupname',
 			'h.domain AS domain',
