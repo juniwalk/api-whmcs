@@ -17,14 +17,14 @@ use ReflectionType;
 
 abstract class AbstractEntity
 {
-	/** @var array<string, string> */
-	protected const PropertyTranslate = [];
-
 	/** @var array<string, bool> */
-	protected const SnapshotExclude = [
+	private const SnapshotExclude = [
 		'__params' => true,
 		'__snapshot' => true,
 	];
+
+	/** @var array<string, string> */
+	protected const PropertyTranslate = [];
 
 	/** @var array<string, ?scalar> */
 	private array $__params = [];
