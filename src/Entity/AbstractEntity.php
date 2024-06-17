@@ -17,7 +17,10 @@ use ReflectionType;
 
 abstract class AbstractEntity
 {
+	/** @var array<string, string> */
 	protected const PropertyTranslate = [];
+
+	/** @var array<string, bool> */
 	protected const SnapshotExclude = [
 		'__params' => true,
 		'__snapshot' => true,
@@ -81,7 +84,6 @@ abstract class AbstractEntity
 	 */
 	private function snapshot(): array
 	{
-		/** @var array<string, ?scalar> */
 		$snapshot = array_diff_key(get_object_vars($this), self::SnapshotExclude);
 		return Arrays::walk($snapshot, fn($v, $k) => yield mb_strtolower($k) => $v);
 	}
