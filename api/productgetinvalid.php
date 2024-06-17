@@ -20,13 +20,26 @@ try {
 	$query = Capsule::table('tblhosting AS h')
 		->join('tblclients AS c', 'h.userid', '=', 'c.id')
 		->join('tblproducts AS p', 'h.packageid', '=', 'p.id')
+		->join('tblproductgroups AS g', 'p.gid', '=', 'g.id')
+		->join('tblproducts_slugs AS s', type: 'left', first: function($join) {
+			$join->on('p.id', '=', 's.product_id');
+			$join->on('p.gid', '=', 's.group_id');
+			$join->on('s.active', '=', '1');
+		})
 		->select(
 			'h.id AS id',
 			'c.id AS clientid',
 			'p.id AS pid',
+			'p.gid',
+			'p.type',
 			'p.name',
+			'p.description',
+			'g.name as groupname',
 			'h.domain AS domain',
+			'p.paytype',
 			'h.domainstatus AS status',
+			'h.diskusage',
+			'h.disklimit',
 			'h.nextduedate',
 			'h.nextinvoicedate',
 		)
