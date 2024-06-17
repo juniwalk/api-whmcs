@@ -7,9 +7,38 @@
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-if (!defined("WHMCS")) die("This file cannot be accessed directly");
+defined('WHMCS') or die('This file cannot be accessed directly');
 
-function get_env($vars) {
+try {
+	$request = get_env(get_defined_vars());
+
+	$query = Capsule::table('tbldomains')->select()
+		// Update 13.10.2022
+		// ->whereRaw("status = 'Active' AND (expirydate = '0000-00-00' OR expirydate IS NULL)");
+		->whereRaw("
+			(`status` = 'Active' AND (DAYNAME(expirydate) IS NULL OR DATEDIFF(expirydate, nextduedate) <> 30)) OR
+			(`status` NOT IN('Active', 'Cancelled'))
+		");
+
+
+	$domains = $query->get();
+	$apiresults = [
+		'result' => 'success',
+		'totalresults' => sizeof($domains),
+		'domains' => [
+			'domain' => $domains,
+		],
+	];
+
+} catch (Throwable $e) {
+	$apiresults = [
+		'result' => 'error',
+		'message' => $e->getMessage(),
+	];
+}
+
+function get_env(array $vars): object
+{
 	$array = ['action' => [], 'params' => []];
 
 	if (isset($vars['cmd'])) {
@@ -28,34 +57,4 @@ function get_env($vars) {
 	}
 
 	return (object) $array;
-}
-
-try {
-	$vars = get_defined_vars();
-	$request = get_env($vars);
-
-	$query = Capsule::table('tbldomains')->select()
-// Update 13.10.2022
-//		->whereRaw("status = 'Active' AND (expirydate = '0000-00-00' OR expirydate IS NULL)");
-		->whereRaw("
-			(`status` = 'Active' AND (DAYNAME(expirydate) IS NULL OR DATEDIFF(expirydate, nextduedate) <> 30)) OR
-			(`status` NOT IN('Active', 'Cancelled'))
-		");
-
-
-	$domains = $query->get();
-	$apiresults = [
-		'result' => 'success',
-		'message' => 'Success Message',
-		'totalresults' => sizeof($domains),
-		'domains' => [
-			'domain' => $domains,
-		],
-	];
-
-} catch (Exception $e) {
-	$apiresults = [
-		'result' => 'error',
-		'message' => $e->getMessage()
-	];
 }
