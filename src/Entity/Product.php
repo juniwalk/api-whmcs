@@ -18,7 +18,7 @@ use JuniWalk\WHMCS\Enums\DomainStatus as Status;
  * 		biennially: float,
  * 		triennially: float,
  * }
- * @phpstan-type PriceList array<string, Price>
+ * @phpstan-type PriceList array<string, ?Price>
  */
 class Product extends AbstractEntity
 {
