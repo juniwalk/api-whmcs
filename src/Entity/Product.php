@@ -42,7 +42,7 @@ class Product extends AbstractEntity
 	protected ?int $disklimit;
 
 	/** @var PriceList */
-	protected array $pricing;
+	protected array $pricing = [];
 
 
 	public function getId(): int
