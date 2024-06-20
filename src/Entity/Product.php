@@ -37,6 +37,7 @@ class Product extends AbstractEntity
 	protected ?string $groupname;
 	protected ?string $domain;
 	protected ?string $paytype;
+	protected ?string $billingCycle;
 	protected ?Status $status;
 	protected ?int $diskusage;
 	protected ?int $disklimit;
@@ -96,6 +97,12 @@ class Product extends AbstractEntity
 	public function getDomain(): ?string
 	{
 		return $this->domain;
+	}
+
+
+	public function getBillingCycle(): ?string
+	{
+		return $this->billingCycle;
 	}
 
 

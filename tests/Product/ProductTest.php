@@ -32,6 +32,8 @@ final class ProductTest extends TestCase
 			Assert::same($product->getGroupName(), 'Webhosting');
 			Assert::same($product->getStatus(), Status::Active);
 		}
+
+		Assert::true(true);	// If there are no invalid products
 	}
 }
 
