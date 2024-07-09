@@ -16,8 +16,37 @@ require __DIR__.'/../bootstrap.php';
  */
 final class ProductTest extends TestCase
 {
+	const DomainName = 'dveplusdve.cz';
+
 	public function setUp() {}
 	public function tearDown() {}
+
+	public function testProduct(): void
+	{
+		$whmcs = getConfig()->createConnector();
+
+		if (!$item = $whmcs->getHostingByDomain(self::DomainName)) {
+			Assert::true(true);	// If product is not found
+			return;
+		}
+
+		$diskLimit = $whmcs->findDiskLimitByDomain(self::DomainName) ?? 0;
+		$diskUsage = mt_rand(0, $diskLimit);
+
+		try {
+			$item->setDiskLimit($diskLimit);
+			$item->setDiskUsage($diskUsage);
+
+			$whmcs->updateClientProduct($item);
+
+		} catch (Throwable) {
+			Assert::fail('Unable to update hosting');
+		}
+
+		Assert::same($item->isDiskOverLimit(), $diskUsage >= $diskLimit);
+		Assert::same($item->getDiskLimit(), $diskLimit);
+		Assert::same($item->getDiskUsage(), $diskUsage);
+	}
 
 	public function testGetProductsInvalid(): void
 	{
