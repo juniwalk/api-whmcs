@@ -65,8 +65,19 @@ abstract class AbstractEntity
 	 */
 	public function changes(): array
 	{
-		$snapshot = $this->snapshot();
-		$changes = array_diff_assoc($snapshot, $this->__snapshot);
+		$compare = function(mixed $a, mixed $b) use (&$compare): int {
+			if (is_array($a) && is_array($b)) {
+				$a = $b = array_udiff_assoc($a, $b, $compare);
+			}
+
+			return intval($a !== $b);
+		};
+
+		$changes = array_udiff_assoc(
+			$snapshot = $this->snapshot(),
+			$this->__snapshot,
+			$compare,
+		);
 
 		foreach (static::PropertyTranslate as $from => $to) {
 			$changes[$to] = $snapshot[$from] ?? null;
