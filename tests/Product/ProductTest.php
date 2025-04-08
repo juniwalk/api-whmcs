@@ -54,7 +54,7 @@ final class ProductTest extends TestCase
 		$items = $whmcs->getProductsInvalid();
 
 		foreach ($items as $product) {
-			if ($product->getClientId() <> 13) {
+			if ($product->getId() <> 31) {
 				continue;
 			}
 
