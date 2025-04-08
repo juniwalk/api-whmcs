@@ -120,6 +120,7 @@ trait BillingSubSystem
 	public function createInvoice(int $userId, array $params): array
 	{
 		$params['userid'] = $userId;
+		/** @var array{userid: int, item?: array<int, array{description: string, amount: float, taxed: bool}>} */
 		$params = $this->check($params, [
 			'userid'				=> Expect::int()->required(),
 			'status'				=> Expect::string(),
@@ -139,8 +140,8 @@ trait BillingSubSystem
 			])),
 		]);
 
-		foreach ($params['item'] ?? [] as $index => $item) {	// @phpstan-ignore foreach.nonIterable
-			foreach ($item as $key => $value) {					// @phpstan-ignore foreach.nonIterable
+		foreach ($params['item'] ?? [] as $index => $item) {
+			foreach ($item as $key => $value) {
 				$params['item'.$key.$index] = $value;
 			}
 		}
