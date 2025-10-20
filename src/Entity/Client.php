@@ -112,12 +112,12 @@ class Client extends AbstractEntity implements HtmlOption
 			$params['%fullName%'] = null;
 		}
 
-		$content = Html::el()
-			->addHtml(Html::el('div class="border-bottom border-secondary text-truncate"')
-				->addHtml(Html::el('span', $params['%companyName%']))
-				->addHtml(Html::badge((string) $params['%id%'])->addClass('float-right mt-1'))
+		$content = Html::el('div class="d-flex flex-column flex-grow-1"')
+			->addHtml(Html::el('div class="d-flex align-items-center border-bottom border-secondary pb-1"')
+				->addHtml(Html::el('span class="flex-fill text-truncate"', $params['%companyName%']))
+				->addHtml(Html::badge((string) $params['%id%']))
 			)
-			->addHtml(Html::el('small', trim($params['%fullName%'].', '.$params['%email%'], ', ')));
+			->addHtml(Html::el('span class="fs-8 pt-1"', trim($params['%fullName%'].', '.$params['%email%'], ', ')));
 
 		return Html::option(
 			value: $this->id,
