@@ -7,7 +7,6 @@
 
 namespace JuniWalk\WHMCS\Enums;
 
-use JuniWalk\Utils\Enums\Color;
 use JuniWalk\Utils\Enums\Interfaces\LabeledEnum;
 use JuniWalk\Utils\Enums\Traits\Labeled;
 
@@ -22,11 +21,5 @@ enum DomainType: string implements LabeledEnum
 	public function label(): string
 	{
 		return 'whmcs.enum.domain-type.'.$this->value;
-	}
-
-
-	public function color(): Color
-	{
-		return Color::Secondary;
 	}
 }
