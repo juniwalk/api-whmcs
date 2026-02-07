@@ -5,7 +5,7 @@
  * @license   MIT License
  */
 
-use JuniWalk\WHMCS\Enums\DomainStatus as Status;
+use JuniWalk\WHMCS\Enums\DomainStatus;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -59,7 +59,7 @@ final class ProductTest extends TestCase
 			}
 
 			Assert::same($product->getGroupName(), 'Webhosting');
-			Assert::same($product->getStatus(), Status::Active);
+			Assert::same($product->getStatus(), DomainStatus::Active);
 		}
 
 		Assert::true(true);	// If there are no invalid products
