@@ -1,0 +1,13 @@
+
+#
+# @copyright Martin Procházka (c) 2022
+# @license   MIT License
+#
+
+enum:
+
+	invoice-status:
+		draft: 'Koncept'
+		paid: 'Zaplaceno'
+		unpaid: 'Nezaplaceno'
+		cancelled: 'Zrušeno'
