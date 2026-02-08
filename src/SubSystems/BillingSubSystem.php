@@ -157,7 +157,7 @@ trait BillingSubSystem
 	/**
 	 * @see https://developers.whmcs.com/api-reference/getinvoice/
 	 */
-	public function getInvoice(int $invoiceId): Invoice
+	public function getInvoice(int|string $invoiceId): Invoice
 	{
 		/** @var array<string, ?scalar> */
 		$response = $this->call('GetInvoice', [
