@@ -9,19 +9,19 @@ namespace JuniWalk\WHMCS\SubSystems;
 
 trait LinkSubSystem
 {
-	public function createClientLink(int $clientId): string
+	public function createClientLink(int|string $clientId): string
 	{
 		return $this->url.'/'.$this->adminDir.'/clientssummary.php?userid='.$clientId;
 	}
 
 
-	public function createServiceLink(int $serviceId): string
+	public function createServiceLink(int|string $serviceId): string
 	{
 		return $this->url.'/'.$this->adminDir.'/clientsservices.php?productselect='.$serviceId;
 	}
 
 
-	public function createInvoiceLink(int $invoiceId): string
+	public function createInvoiceLink(int|string $invoiceId): string
 	{
 		return $this->url.'/'.$this->adminDir.'/invoices.php?action=edit&id='.$invoiceId;
 	}
